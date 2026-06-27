@@ -1,0 +1,14 @@
+---
+# Lesson 2 test. Run with:
+#   autopkg run -vv Test-Recipes/Sleep.test.recipe.yaml --search-dir SharedProcessors
+# It fails until you complete SharedProcessors/Sleep.py.
+Description: Test the Sleep processor (Lesson 2).
+Identifier: com.github.jgstew.macadmins2026.test.Sleep
+Input:
+  NAME: SleepTest
+MinimumVersion: "2.3"
+Process:
+  # Pass the value as a string to prove your int() coercion works.
+  - Processor: com.github.jgstew.macadmins2026.SharedProcessors/Sleep
+    Arguments:
+      sleep_seconds: "2"

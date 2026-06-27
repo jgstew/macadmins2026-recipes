@@ -1,0 +1,10 @@
+# The four workshop lessons use only the Python standard library
+# (hashlib, time) plus autopkglib, so there is nothing extra to pip install
+# for the core exercises.
+#
+# autopkglib itself is NOT a pip package -- you get it from an AutoPkg
+# checkout. See docs/00-setup.md.
+#
+# `pre-commit` is optional but handy if you want the same linting/formatting
+# the jgstew-recipes repo uses. Uncomment to install it:
+# pre-commit

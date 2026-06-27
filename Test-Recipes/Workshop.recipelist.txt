@@ -1,0 +1,4 @@
+com.github.jgstew.macadmins2026.test.HelloWorld
+com.github.jgstew.macadmins2026.test.Sleep
+com.github.jgstew.macadmins2026.test.StringFormat
+com.github.jgstew.macadmins2026.test.FileHasher

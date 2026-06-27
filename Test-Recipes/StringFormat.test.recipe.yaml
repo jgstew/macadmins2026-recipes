@@ -1,0 +1,49 @@
+---
+# Lesson 3 test. Run with:
+#   autopkg run -vv Test-Recipes/StringFormat.test.recipe.yaml --search-dir SharedProcessors
+# It fails until you complete SharedProcessors/StringFormat.py.
+# Background on the format mini-language:
+#   https://docs.python.org/3/library/string.html#format-specification-mini-language
+Description: Test the StringFormat processor (Lesson 3).
+Identifier: com.github.jgstew.macadmins2026.test.StringFormat
+Input:
+  NAME: StringFormatTest
+MinimumVersion: "2.3"
+Process:
+  # 1. zero-pad a single value to width 5:
+  - Processor: com.github.jgstew.macadmins2026.SharedProcessors/StringFormat
+    Arguments:
+      format_string: "{value:0>5}"
+      format_value: "42"
+
+  - Processor: com.github.jgstew.macadmins2026.SharedProcessors/AssertInputContainsString
+    Arguments:
+      input_string: "%formatted_string%"
+      assert_string: "00042"
+
+  # 2. build a string from named kwargs:
+  - Processor: com.github.jgstew.macadmins2026.SharedProcessors/StringFormat
+    Arguments:
+      format_string: "{name}-v{version}"
+      format_kwargs:
+        name: "MyApp"
+        version: "1.2.3"
+
+  - Processor: com.github.jgstew.macadmins2026.SharedProcessors/AssertInputContainsString
+    Arguments:
+      input_string: "%formatted_string%"
+      assert_string: "MyApp-v1.2.3"
+
+  # 3. assemble a semantic version from separate components:
+  - Processor: com.github.jgstew.macadmins2026.SharedProcessors/StringFormat
+    Arguments:
+      format_string: "v{major}.{minor}.{patch}"
+      format_kwargs:
+        major: 2
+        minor: 9
+        patch: 14
+
+  - Processor: com.github.jgstew.macadmins2026.SharedProcessors/AssertInputContainsString
+    Arguments:
+      input_string: "%formatted_string%"
+      assert_string: "v2.9.14"

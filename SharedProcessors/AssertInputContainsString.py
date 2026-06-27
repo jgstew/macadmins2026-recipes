@@ -1,0 +1,63 @@
+#!/usr/local/autopkg/python
+#
+# James Stewart @JGStew - 2026
+#
+# Based on:
+# - https://github.com/jgstew/jgstew-recipes/blob/main/SharedProcessors/AssertInputContainsString.py
+#
+# This processor is PROVIDED COMPLETE for the workshop. The test recipes use it
+# to verify the value your processor produced. You don't need to edit it.
+#
+"""See docstring for AssertInputContainsString class"""
+
+from autopkglib import (  # pylint: disable=import-error,unused-import
+    Processor,
+    ProcessorError,
+)
+
+__all__ = ["AssertInputContainsString"]
+
+
+class AssertInputContainsString(Processor):  # pylint: disable=invalid-name
+    """Asserts that assert_string is contained within input_string, raising an error on failure (used to test other processors)."""
+
+    description = __doc__
+    input_variables = {
+        "input_string": {"required": True, "description": "string to test"},
+        "assert_string": {
+            "required": True,
+            "description": "the string that must be within input_string",
+        },
+        "raise_error": {
+            "required": False,
+            "default": True,
+            "description": "determines if a failure should raise an error",
+        },
+    }
+    output_variables = {
+        "assert_result": {"description": "The result of the check"},
+    }
+    __doc__ = description
+
+    def main(self):
+        """Execution starts here."""
+        input_string = str(self.env.get("input_string"))
+        assert_string = str(self.env.get("assert_string"))
+        raise_error = bool(self.env.get("raise_error", True))
+
+        self.output(f"`{input_string}` must contain `{assert_string}`", 2)
+
+        try:
+            assert assert_string in input_string
+            self.env["assert_result"] = "found!"
+            self.output(f"PASS: found `{assert_string}`")
+        except AssertionError:
+            self.env["assert_result"] = "ERROR: not found!"
+            self.output(f"ERROR: `{assert_string}` not found in `{input_string}`!", 0)
+            if raise_error:
+                raise
+
+
+if __name__ == "__main__":
+    PROCESSOR = AssertInputContainsString()
+    PROCESSOR.execute_shell()
