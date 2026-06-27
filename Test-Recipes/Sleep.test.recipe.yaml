@@ -8,7 +8,8 @@ Input:
   NAME: SleepTest
 MinimumVersion: "2.3"
 Process:
-  # Pass the value as a string to prove your int() coercion works.
+  # This Argument is handed to the processor through self.env, where Sleep
+  # reads it back out by name.
   - Processor: com.github.jgstew.macadmins2026.SharedProcessors/Sleep
     Arguments:
       sleep_seconds: "2"

@@ -24,30 +24,47 @@ input_variables = {
 }
 ```
 
-Even with a declared `default`, read inputs defensively in `main()`:
+Even with a declared `default`, read inputs in `main()` from `self.env` — the
+shared recipe environment is the source of truth for what the recipe passed:
 
 ```python
-sleep_seconds = int(self.env.get("sleep_seconds", 15))
+sleep_seconds = self.env.get("sleep_seconds", 15)
 ```
 
-### Everything can arrive as a string
+### How a recipe's `Arguments:` reach your processor
 
-Recipe `Arguments:` values — especially from YAML and from `%VARIABLE%`
-substitution — often reach you as **strings**. If you need a number, coerce it:
+When a recipe step lists `Arguments:`, AutoPkg copies each one into the shared
+`self.env` *before* it calls your `main()`; your processor reads them back out by
+name. That hand-off is the whole point of inputs:
 
-```python
-sleep_seconds = int(self.env.get("sleep_seconds", 15))   # "5"  -> 5
+```yaml
+# in the recipe step
+- Processor: .../Sleep
+  Arguments:
+    sleep_seconds: "2"      # the recipe author sets a key...
 ```
 
-The `Sleep` test recipe deliberately passes `"2"` (a string) to prove your
-`int()` call works. This is the single most common bug in a new processor.
+```python
+# in the processor's main()
+sleep_seconds = int(self.env.get("sleep_seconds", 15))   # ...the processor reads it
+```
 
-### Inputs can be richer than strings
+The `Sleep` test recipe passes `sleep_seconds` exactly this way to demonstrate
+the hand-off.
 
-Inputs can be lists or dicts too. `StringFormat` takes a `format_kwargs` dict:
+> Aside: an argument arrives as whatever the recipe author typed — here the
+> quoted string `"2"`. (Separately, when a value contains a `%VARIABLE%` token,
+> that substitution always yields a string.) Either way, wrap a value in
+> `int(...)` when you need it as a number — which is why the snippet above does.
+
+### An input can be a dict or list, not just a single value
+
+A declared input can hold structured data, not only a scalar. `StringFormat` —
+a processor that **transforms its inputs into an output** — declares a
+`format_kwargs` dict input of named values to fold into the result:
 
 ```python
-format_kwargs = self.env.get("format_kwargs", {})   # default to empty dict
+format_kwargs = self.env.get("format_kwargs", {})   # a dict-valued input
 ```
 
 ## `output_variables`
@@ -110,8 +127,9 @@ if not file_path:
     raise ProcessorError("No file_path (or pathname) provided to hash!")
 ```
 
-Wrap risky operations and re-raise with context — `StringFormat` turns a bad
-format string into a helpful error:
+Wrap risky work and re-raise with context. `StringFormat` is a processor that
+transforms an input value into an output value; when the input can't be
+processed it surfaces a clear, recipe-level message instead of a raw traceback:
 
 ```python
 try:
@@ -119,5 +137,9 @@ try:
 except (KeyError, IndexError, ValueError) as err:
     raise ProcessorError(f"Failed to format `{format_string}`: {err}") from err
 ```
+
+The transform here happens to use Python's `str.format()`, but the AutoPkg
+takeaway is the pattern: do the work, and raise `ProcessorError` with context
+when it fails.
 
 Next: [3. Testing your processor](03-testing.md).

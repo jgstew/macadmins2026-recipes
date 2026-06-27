@@ -56,8 +56,9 @@ class MyProcessor(Processor):  # pylint: disable=invalid-name
 
     def main(self):
         """Execution starts here. This runs once per recipe step."""
-        # 1. READ inputs from the shared environment (self.env).
-        #    Values can arrive as strings, so coerce types when needed.
+        # 1. READ inputs from the shared environment (self.env), where a
+        #    recipe's Arguments arrive. Coerce types when needed (env values
+        #    can be text, e.g. int() a number).
         example_input = self.env.get("example_input", "")
 
         # 2. DO the work. Keep it small and testable.

@@ -2,7 +2,8 @@
 #
 # Your Name Here - 2026
 #
-# LESSON 2 EXERCISE: optional inputs, defaults, and type coercion.
+# LESSON 2 EXERCISE: optional inputs, defaults, and reading a recipe's
+# Arguments from self.env.
 # Fill in the TODOs below. Reference: docs/02-input-and-output.md
 # Stuck? The working answer is in solutions/Sleep.py
 #
@@ -36,8 +37,8 @@ class Sleep(Processor):  # pylint: disable=invalid-name
     def main(self):
         """Execution starts here."""
         # TODO 2: read "sleep_seconds" from self.env with a default of 15.
-        #         Recipe arguments can arrive as strings ("5"), so wrap the
-        #         value in int(...) before using it.
+        #         self.env is how a recipe's Arguments reach your processor.
+        #         (Aside: env values may arrive as text, so int(...) it.)
         # sleep_seconds = int(self.env.get(..., ...))
 
         # TODO 3: log that you are pausing, then actually pause, then log resume.

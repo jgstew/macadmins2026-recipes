@@ -17,7 +17,7 @@ __all__ = ["StringFormat"]
 
 
 class StringFormat(Processor):  # pylint: disable=invalid-name
-    """Formats a string using Python str.format(), supporting zero-padding, alignment, and named substitutions."""
+    """Transforms input values into an output string: takes a required input and an optional dict input, and fails loudly with ProcessorError when they can't be processed. (Uses Python's str.format() under the hood.)"""
 
     description = __doc__
     input_variables = {

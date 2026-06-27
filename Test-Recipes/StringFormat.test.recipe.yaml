@@ -2,8 +2,10 @@
 # Lesson 3 test. Run with:
 #   autopkg run -vv Test-Recipes/StringFormat.test.recipe.yaml --search-dir SharedProcessors
 # It fails until you complete SharedProcessors/StringFormat.py.
-# Background on the format mini-language:
-#   https://docs.python.org/3/library/string.html#format-specification-mini-language
+# Each pair of steps feeds StringFormat some inputs, then reads the result back
+# from its %formatted_string% output variable to assert on it.
+# (Optional Python aside — the format syntax used in the inputs below:
+#   https://docs.python.org/3/library/string.html#format-specification-mini-language)
 Description: Test the StringFormat processor (Lesson 3).
 Identifier: com.github.jgstew.macadmins2026.test.StringFormat
 Input:

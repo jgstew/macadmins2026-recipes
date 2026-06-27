@@ -49,16 +49,20 @@ Build a greeting and store it in an output variable.
 - Test: `HelloWorld.test.recipe.yaml`
 - Read: [docs/01-anatomy.md](docs/01-anatomy.md)
 
-### Lesson 2 — `Sleep`: optional inputs, defaults, and type coercion
-**New idea:** an optional input with a `default`, and why you must `int()` a
-value that may arrive as the string `"2"`. Pause execution, then resume.
+### Lesson 2 — `Sleep`: how a recipe passes Arguments to a processor
+**New idea:** how a recipe's `Arguments:` reach your processor through the shared
+`self.env`, and how an optional input falls back to its `default` when the recipe
+omits it. Read the value, pause execution, then resume. *(Aside: values read from
+`self.env` may arrive as text like `"2"`, so `int()` it before sleeping.)*
 - Edit: [`SharedProcessors/Sleep.py`](SharedProcessors/Sleep.py)
 - Test: `Sleep.test.recipe.yaml`
 - Read: [docs/02-input-and-output.md](docs/02-input-and-output.md)
 
-### Lesson 3 — `StringFormat`: required inputs and failing loudly
-**New idea:** a `required` input, a dict input, and wrapping risky work in
-`try/except` to raise a clear `ProcessorError`. Apply Python's `str.format()`.
+### Lesson 3 — `StringFormat`: transforming an input into an output, and failing loudly
+**New idea:** a processor that takes input values and produces an output value —
+a `required` input, an optional dict input, and failing loudly with a clear
+`ProcessorError` when the input can't be processed. *(The transform itself just
+uses Python's `str.format()`; that's the mechanism, not the lesson.)*
 - Edit: [`SharedProcessors/StringFormat.py`](SharedProcessors/StringFormat.py)
 - Test: `StringFormat.test.recipe.yaml`
 - Read: [docs/02-input-and-output.md](docs/02-input-and-output.md#failing-loudly-processorerror)

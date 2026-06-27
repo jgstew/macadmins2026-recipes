@@ -32,7 +32,8 @@ class Sleep(Processor):  # pylint: disable=invalid-name
 
     def main(self):
         """Execution starts here."""
-        # Recipe arguments often arrive as strings ("5"), so coerce to int.
+        # A recipe's Arguments arrive in self.env; read sleep_seconds (or its
+        # default of 15). (Aside: env values can be text, so int() it.)
         sleep_seconds = int(self.env.get("sleep_seconds", 15))
 
         self.output(f"Pausing execution for {sleep_seconds} seconds")
