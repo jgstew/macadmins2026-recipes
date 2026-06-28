@@ -1,0 +1,18 @@
+---
+# A tiny recipe that runs our finished HelloWorld processor.
+#
+# Run it (from this HelloWorld/ folder) with:
+#   autopkg run -v HelloWorld.recipe.yaml --search-dir .
+#
+# --search-dir . tells AutoPkg to look in this directory for the recipe and for
+# the `HelloWorld` processor it references (HelloWorld.py lives right here, so
+# the processor can be named directly, with no namespace prefix).
+Description: Demo recipe that runs the HelloWorld processor.
+Identifier: com.github.jgstew.macadmins2026.HelloWorld
+Input:
+  NAME: HelloWorldDemo
+MinimumVersion: "2.3"
+Process:
+  - Processor: HelloWorld
+    Arguments:
+      greeting_name: "MacAdmins"

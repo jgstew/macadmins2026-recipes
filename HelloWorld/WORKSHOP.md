@@ -1,0 +1,444 @@
+# From `print("Hello World!")` to an AutoPkg Processor
+
+A hands-on workshop. PSU MacAdmins 2026.
+
+We start with the most boring Python program there is:
+
+```python
+print("Hello World!")
+```
+
+…and grow it, one small change at a time, into a real AutoPkg processor — the
+kind of thing you'd find in a recipe. The goal isn't to learn Python. It's to
+understand **what an AutoPkg processor actually is** and **why every line of the
+"boilerplate" is there**, so none of it feels like magic.
+
+Each step is a runnable file in [`stages/`](stages). Run each one, watch what it
+does, then read *why* we made the change. The finished result is
+[`HelloWorld.py`](HelloWorld.py) in this folder.
+
+---
+
+## What is a processor, really?
+
+AutoPkg runs **recipes**. A recipe is just an ordered list of **processors**:
+
+```
+recipe ─▶ [Processor A] ─▶ [Processor B] ─▶ [Processor C] ─▶ done
+                    ╲           │            ╱
+                     ╲          │           ╱
+                      ▼         ▼          ▼
+                  self.env  (one shared dictionary)
+```
+
+Every processor shares one dictionary, **`self.env`**. A processor reads some
+values out of it, does one small job, and writes some values back in for the
+next processor. That's the whole model.
+
+And a processor is just a **Python class** that:
+
+1. subclasses `autopkglib.Processor`, and
+2. has a `main()` method.
+
+AutoPkg finds your class, creates an instance, and calls `.main()`. Everything
+below is us building exactly that, and seeing why each piece is needed.
+
+---
+
+## Setup
+
+You need AutoPkg's code so Python can `import autopkglib`. Clone it next to this
+repo, then move into this workshop's folder — every command below is run from
+`HelloWorld/`:
+
+```bash
+# from the repo root: clone AutoPkg next to the repo
+git clone https://github.com/autopkg/autopkg.git ../autopkg
+
+# then work from inside this workshop folder
+cd HelloWorld
+```
+
+That leaves you with:
+
+```
+Projects/
+├── autopkg/                       # AutoPkg's code
+└── macadmins2026-recipes/
+    └── HelloWorld/   ← run commands from here
+```
+
+Two run commands show up below:
+
+- **Plain Python** (Steps 1–4, no AutoPkg yet):
+  ```bash
+  python3 stages/01_hello.py
+  ```
+- **With AutoPkg** (Steps 5+, the file imports `autopkglib`):
+  ```bash
+  PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/05_processor_subclass.py
+  ```
+  `PYTHONPATH=../../autopkg/Code` lets Python find `autopkglib` (two levels up —
+  out of `HelloWorld/`, out of the repo, into `autopkg/`); the bundled
+  `/usr/local/autopkg/python` is used because it already has AutoPkg's
+  dependencies (like pyyaml). Each stage file repeats its own run command in a
+  comment at the top.
+
+---
+
+## Step 1 — a plain script
+
+```python
+print("Hello World!")
+```
+
+```bash
+python3 stages/01_hello.py
+#  Hello World!
+```
+
+It runs. But it is **not** an AutoPkg processor — AutoPkg can't hand it any
+values and can't get anything back out of it. AutoPkg doesn't run scripts; it
+runs processors. So let's become one.
+
+## Step 2 — put the work in a `main()` function
+
+```python
+def main():
+    print("Hello World!")
+
+
+main()
+```
+
+```bash
+python3 stages/02_function.py
+#  Hello World!
+```
+
+**Why:** AutoPkg needs a named entry point it can call *when it decides to* —
+not code that runs the instant the file is read. (AutoPkg **imports** your file;
+anything sitting at the top level would fire during that import, before AutoPkg
+is ready.) We name it `main()` because that's the exact method AutoPkg will look
+for. For now we still call `main()` ourselves on the last line.
+
+## Step 3 — make it a class
+
+```python
+class HelloWorld:
+    def main(self):
+        print("Hello World!")
+
+
+HelloWorld().main()
+```
+
+```bash
+python3 stages/03_class.py
+#  Hello World!
+```
+
+**Why:** AutoPkg processors are **classes**. AutoPkg locates your processor by
+its class name and calls `.main()` on an instance of it. Wrapping `main()` in a
+class named `HelloWorld` is the shape AutoPkg expects. The last line —
+`HelloWorld().main()` — creates an instance and calls main() ourselves. But as
+written it still fires the moment the file is read or imported, which is exactly
+the problem Step 4 fixes.
+
+## Step 4 — only run when the file is executed directly
+
+```python
+class HelloWorld:
+    def main(self):
+        print("Hello World!")
+
+
+if __name__ == "__main__":
+    HelloWorld().main()
+```
+
+```bash
+python3 stages/04_main_guard.py
+#  Hello World!
+```
+
+**Why:** Until now, `HelloWorld().main()` sat at the top level, so it ran the
+instant Python read the file — *including when the file is imported*. And
+importing is exactly how AutoPkg loads your processor: it imports the module to
+get the class, it does **not** run the file as a script. An unguarded `main()`
+call would therefore fire at the wrong moment, every time AutoPkg loaded the
+processor.
+
+`if __name__ == "__main__":` is the guard. Python sets the built-in variable
+`__name__` to the string `"__main__"` **only** when the file is run directly
+(`python3 stages/04_main_guard.py`). When the file is *imported*, `__name__` is
+the module's name instead, so the guarded line is skipped:
+
+- **run it directly** → `__name__ == "__main__"` → `main()` runs (handy for testing)
+- **imported by AutoPkg** → the guard is false → nothing runs on its own; AutoPkg
+  calls `main()` itself when it's ready
+
+Every step from here keeps this guard.
+
+## Step 5 — subclass `Processor`
+
+```python
+from autopkglib import Processor
+
+
+class HelloWorld(Processor):
+    def main(self):
+        print("Hello World!")
+
+
+if __name__ == "__main__":
+    HelloWorld().main()
+```
+
+```bash
+PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/05_processor_subclass.py
+#  Hello World!
+```
+
+**Why:** This is the change that turns "a class" into "an AutoPkg processor."
+Subclassing `Processor` inherits the machinery AutoPkg relies on — the `self.env`
+environment, `self.output()`, argument handling, and a standalone entry point.
+
+Notice the run command got longer: the moment we `import autopkglib`, Python has
+to be able to *find* AutoPkg (`PYTHONPATH`) and run on a Python that has its
+dependencies. A processor is still just Python — it simply depends on AutoPkg.
+
+## Step 6 — log with `self.output()` instead of `print()`
+
+```python
+class HelloWorld(Processor):
+    def main(self):
+        self.output("Hello World!")
+
+
+if __name__ == "__main__":
+    HelloWorld({"verbose": 1}).main()
+```
+
+```bash
+PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/06_self_output.py
+#  HelloWorld: Hello World!
+```
+
+**Why:** `print()` always dumps to stdout and ignores AutoPkg. `self.output()`
+is AutoPkg's logging: it tags the line with the processor name (`HelloWorld:`)
+and only shows it when the run is verbose enough (the `-v` flags).
+
+Here's the key insight: `self.output()` decides whether to print by checking the
+verbosity level **stored in `self.env`**. So it needs `self.env` to exist —
+which is why we now create the instance with a dictionary: `HelloWorld({"verbose":
+1})`. That dictionary is the environment AutoPkg normally provides; right now
+we're standing in for AutoPkg. Set `verbose` to `0` and the line disappears,
+exactly like a non-verbose `autopkg run`.
+
+## Step 7 — accept input from the recipe
+
+```python
+class HelloWorld(Processor):
+    input_variables = {
+        "greeting_name": {
+            "required": False,
+            "default": "World",
+            "description": "Name to greet (default: World).",
+        },
+    }
+    output_variables = {}
+
+    def main(self):
+        greeting_name = self.env.get("greeting_name", "World")
+        self.output(f"Hello {greeting_name}!")
+
+
+if __name__ == "__main__":
+    HelloWorld({"verbose": 1, "greeting_name": "MacAdmins"}).main()
+```
+
+```bash
+PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/07_inputs.py
+#  HelloWorld: Hello MacAdmins!
+```
+
+**Why:** A hardcoded greeting isn't worth much. `input_variables` **declares**
+what a recipe is allowed to pass in — each input's name, whether it's
+`required`, a `default` for when the recipe omits it, and a `description`
+(this is what `autopkg processor-info HelloWorld` prints). The actual value
+arrives in `self.env`, and we read it with `self.env.get("greeting_name",
+"World")`.
+
+We pass `greeting_name` in through the env dict here, just like a recipe's
+`Arguments:` will. Change the value and the output changes — without touching
+`main()`. That parameterization is the entire point of a processor.
+
+## Step 8 — produce a result for the next step
+
+```python
+class HelloWorld(Processor):
+    input_variables = {
+        "greeting_name": {
+            "required": False,
+            "default": "World",
+            "description": "Name to greet (default: World).",
+        },
+    }
+    output_variables = {
+        "greeting_result": {
+            "description": "The greeting that was produced.",
+        },
+    }
+
+    def main(self):
+        greeting_name = self.env.get("greeting_name", "World")
+        greeting = f"Hello {greeting_name}!"
+        self.output(greeting)
+        self.env["greeting_result"] = greeting
+
+
+if __name__ == "__main__":
+    processor = HelloWorld({"verbose": 1, "greeting_name": "MacAdmins"})
+    processor.main()
+    print("greeting_result is now:", processor.env["greeting_result"])
+```
+
+```bash
+PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/08_outputs.py
+#  HelloWorld: Hello MacAdmins!
+#  greeting_result is now: Hello MacAdmins!
+```
+
+**Why:** A processor usually hands something to the next processor in the recipe.
+We store our greeting back into `self.env["greeting_result"]`, and **declare**
+that output in `output_variables`. Anything in `self.env` is visible to every
+later step (and shown by `autopkg run -vv`). The last two lines peek into the
+environment to prove the value is sitting there, ready for the next processor.
+
+## Step 9 — the boilerplate, and running it for real
+
+Steps 1–8 are the whole idea. A shipped processor just adds a bit of
+conventional boilerplate around it. Here is the finished
+[`HelloWorld.py`](HelloWorld.py):
+
+```python
+#!/usr/local/autopkg/python
+#
+# Your Name Here - 2026
+#
+"""See docstring for HelloWorld class"""
+
+from autopkglib import Processor, ProcessorError  # noqa: F401
+
+__all__ = ["HelloWorld"]
+
+
+class HelloWorld(Processor):
+    """Greets a named recipient and stores the greeting as an output variable."""
+
+    description = __doc__
+    input_variables = {
+        "greeting_name": {
+            "required": False,
+            "default": "World",
+            "description": "Name to greet (default: World).",
+        },
+    }
+    output_variables = {
+        "greeting_result": {
+            "description": "The greeting that was produced.",
+        },
+    }
+    __doc__ = description
+
+    def main(self):
+        """Execution starts here. AutoPkg calls this once per recipe step."""
+        greeting_name = self.env.get("greeting_name", "World")
+        greeting = f"Hello {greeting_name}!"
+        self.output(greeting)
+        self.env["greeting_result"] = greeting
+
+
+if __name__ == "__main__":
+    PROCESSOR = HelloWorld()
+    PROCESSOR.execute_shell()
+```
+
+Every new piece, and why it's there:
+
+| Piece | Why it exists |
+|-------|---------------|
+| `#!/usr/local/autopkg/python` | The interpreter AutoPkg uses on macOS. Documents the intended Python. |
+| `"""module docstring"""` | Convention; a short pointer to the class. |
+| `from autopkglib import Processor, ProcessorError` | `Processor` is the base class; `ProcessorError` is what you `raise` to stop a recipe with a clear message (imported so it's ready to use). |
+| `__all__ = ["HelloWorld"]` | Declares the module's public name — the processor class. |
+| class docstring + `description = __doc__` … `__doc__ = description` | AutoPkg reads a class attribute called `description` (shown by `autopkg processor-info`). This idiom reuses the docstring as the description, then restores `__doc__`. |
+| `if __name__ == "__main__": … execute_shell()` | The same guard from Step 4 — it keeps the run-it line from firing when AutoPkg imports the module. Here it calls `execute_shell()` (AutoPkg's standalone entry point) rather than `main()`, so you can run the file directly the way AutoPkg's own machinery does. |
+
+**The class name matches the file name** (`HelloWorld` ↔ `HelloWorld.py`) on
+purpose: that's how AutoPkg locates the processor a recipe asks for.
+
+### Run it inside a real recipe
+
+The whole point was to be runnable by AutoPkg. The recipe
+[`HelloWorld.recipe.yaml`](HelloWorld.recipe.yaml) does exactly that:
+
+```yaml
+Process:
+  - Processor: HelloWorld
+    Arguments:
+      greeting_name: "MacAdmins"
+```
+
+```bash
+autopkg run -v HelloWorld.recipe.yaml --search-dir .
+#  Processing HelloWorld.recipe.yaml...
+#  HelloWorld
+#  HelloWorld: Hello MacAdmins!
+```
+
+`--search-dir .` tells AutoPkg to look in this folder for both the recipe and
+the `HelloWorld` processor it references. The recipe's `Arguments:` become keys
+in `self.env` before `main()` runs — the same hand-off we faked by hand in
+Steps 7–8, now done by AutoPkg for real. 🎉
+
+### (Optional) Run the processor standalone
+
+`execute_shell()` reads an input plist from **stdin**, so feed it empty input
+and pass arguments as `key=value`:
+
+```bash
+echo -n "" | PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python HelloWorld.py greeting_name=MacAdmins verbose=1
+```
+
+It prints `HelloWorld: Hello MacAdmins!` and dumps the resulting environment
+(including `greeting_result`) back out as a plist — exactly what it would hand to
+the next processor.
+
+---
+
+## Recap
+
+You turned `print("Hello World!")` into a processor by answering, one step at a
+time, the questions AutoPkg needs answered:
+
+1. **What do you call?** → a `main()` method (Steps 2–3)
+2. **When does it run?** → only under the `if __name__ == "__main__"` guard, so
+   that importing the file (as AutoPkg does) doesn't fire it (Step 4)
+3. **On what?** → a class that subclasses `Processor` (Steps 3, 5)
+4. **How do you talk to the run?** → `self.output()`, reading verbosity from
+   `self.env` (Step 6)
+5. **What goes in?** → `input_variables`, read from `self.env` (Step 7)
+6. **What comes out?** → `output_variables`, written to `self.env` (Step 8)
+7. **How is it packaged and launched?** → the boilerplate + `execute_shell()`
+   (Step 9)
+
+None of it is magic — it's all in service of that one shared `self.env`
+dictionary moving down the list of processors in a recipe.
+
+## Where to go next
+
+Every processor in the wild is just more of this. For real, working examples —
+downloaders, version extractors, file hashers — see
+[jgstew-recipes/SharedProcessors](https://github.com/jgstew/jgstew-recipes/tree/main/SharedProcessors).
