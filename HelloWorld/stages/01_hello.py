@@ -7,4 +7,4 @@
 # result. Everything in the steps that follow turns this one line into something
 # AutoPkg can actually run inside a recipe.
 
-print("Hello World!")
+print("Hello World! (step 1)")

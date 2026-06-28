@@ -1,6 +1,7 @@
-# Step 6 — log with self.output() instead of print().
+# Step 7 — log with self.output() instead of print().
 #
-# Run it:  PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/06_self_output.py
+# Run it:  /usr/local/autopkg/python stages/07_self_output.py
+#   (No PYTHONPATH needed — the Step 6 sys.path line, kept below, handles it.)
 #
 # print() always writes to stdout and ignores AutoPkg entirely. self.output() is
 # AutoPkg's logging: it tags the line with the processor name and only shows it
@@ -11,12 +12,16 @@
 # now hand the instance an env dict with "verbose" turned on. Here WE are
 # playing the role AutoPkg normally plays.
 
-from autopkglib import Processor
+import sys
+
+sys.path.insert(0, "/Library/AutoPkg")
+
+from autopkglib import Processor  # noqa: E402
 
 
 class HelloWorld(Processor):
     def main(self):
-        self.output("Hello World!")
+        self.output("Hello World! (step 7)")
 
 
 # Stand in for AutoPkg: provide an env (with verbose on) and call main().

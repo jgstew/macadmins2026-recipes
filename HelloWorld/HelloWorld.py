@@ -2,11 +2,13 @@
 #
 # Your Name Here - 2026
 #
-# Step 9 — the finished processor.
+# Step 10 — the finished processor.
 #
-# This is stage 08 plus the conventional boilerplate every shipped processor
-# carries. WORKSHOP.md explains how we got here from a one-line script and what
-# each piece below is for. The class name (HelloWorld) matches the file name
+# This is stage 09 plus the conventional boilerplate every shipped processor
+# carries. Note there's no sys.path tweak (Step 6): when AutoPkg runs your recipe
+# it already has autopkglib on the path, so a shipped processor never hard-codes
+# it. WORKSHOP.md explains how we got here from a one-line script and what each
+# piece below is for. The class name (HelloWorld) matches the file name
 # (HelloWorld.py) on purpose: that is how AutoPkg locates the processor.
 #
 """See docstring for HelloWorld class"""

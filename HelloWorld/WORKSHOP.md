@@ -67,19 +67,22 @@ Then work from inside this workshop folder:
 cd HelloWorld
 ```
 
-Two forms of run command show up below:
+Almost every command is just `/usr/local/autopkg/python stages/0X.py`:
 
-- **Steps 1–4** don't import `autopkglib`, so the bundled Python by itself is enough:
-  ```bash
-  /usr/local/autopkg/python stages/01_hello.py
-  ```
-- **Steps 5+** import `autopkglib`. The installer put it in `/Library/AutoPkg`,
-  which isn't on the Python's default search path, so we point Python at it with
-  `PYTHONPATH`:
-  ```bash
-  PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/05_processor_subclass.py
-  ```
-  Each stage file repeats its own run command in a comment at the top.
+```bash
+/usr/local/autopkg/python stages/01_hello.py
+```
+
+The one exception is **Step 5**, the first step to `import autopkglib`. The
+installer put `autopkglib` in `/Library/AutoPkg`, which isn't on Python's default
+search path, so that single command needs a `PYTHONPATH` prefix:
+
+```bash
+PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/05_processor_subclass.py
+```
+
+**Step 6** then folds that path into the script itself, so Steps 6–9 go back to
+the plain form. Each stage file shows its exact command at the top.
 
 ---
 
@@ -138,9 +141,25 @@ HelloWorld().main()
 **Why:** AutoPkg processors are **classes**. AutoPkg locates your processor by
 its class name and calls `.main()` on an instance of it. Wrapping `main()` in a
 class named `HelloWorld` is the shape AutoPkg expects. The last line —
-`HelloWorld().main()` — creates an instance and calls main() ourselves. But as
-written it still fires the moment the file is read or imported, which is exactly
-the problem Step 4 fixes.
+`HelloWorld().main()` — creates an instance and calls main() ourselves.
+
+But watch what that last line costs us. Instead of *running* the file, *import*
+it:
+
+```bash
+PYTHONPATH=stages /usr/local/autopkg/python -c "__import__('03_class')"
+#  Hello World!
+```
+
+We never called anything — we only imported the module — yet it still printed.
+**Importing a module runs everything at its top level**, and `HelloWorld().main()`
+is top-level code. That matters because AutoPkg loads a processor by *importing*
+it: our greeting would fire at import time, before AutoPkg is ready to run the
+recipe. Step 4 fixes exactly this.
+
+(Two notes on that command: `PYTHONPATH=stages` tells Python where to find the
+module to import — running a file by its path, as above, doesn't need it; and we
+write `__import__('03_class')` because a module name can't start with a digit.)
 
 ## Step 4 — only run when the file is executed directly
 
@@ -175,6 +194,16 @@ the module's name instead, so the guarded line is skipped:
 - **imported by AutoPkg** → the guard is false → nothing runs on its own; AutoPkg
   calls `main()` itself when it's ready
 
+Prove it with the same import from Step 3 — this time it stays silent:
+
+```bash
+PYTHONPATH=stages /usr/local/autopkg/python -c "__import__('04_main_guard')"
+#  (no output — the guard skipped main() because __name__ wasn't "__main__")
+```
+
+Run it directly, though, and it still prints `Hello World!`. That's the goal:
+**importable with no side effects, runnable on demand.**
+
 Every step from here keeps this guard.
 
 ## Step 5 — subclass `Processor`
@@ -206,9 +235,63 @@ Python has to be able to *find* it. The installer put it in `/Library/AutoPkg`,
 which isn't on the bundled Python's default search path, so
 `PYTHONPATH=/Library/AutoPkg` points Python there. (The `autopkg` command itself
 doesn't need this — its own script lives inside `/Library/AutoPkg`.) A processor
-is still just Python — it simply depends on `autopkglib`.
+is still just Python — it simply depends on `autopkglib`. Typing that prefix on
+every command gets old fast, so Step 6 makes it unnecessary.
 
-## Step 6 — log with `self.output()` instead of `print()`
+## Step 6 — stop typing `PYTHONPATH`: set the search path in code
+
+```python
+import sys
+
+sys.path.insert(0, "/Library/AutoPkg")
+
+from autopkglib import Processor  # noqa: E402
+
+
+class HelloWorld(Processor):
+    def main(self):
+        print("Hello World!")
+
+
+if __name__ == "__main__":
+    HelloWorld().main()
+```
+
+```bash
+/usr/local/autopkg/python stages/06_sys_path.py
+#  Hello World!
+```
+
+**Why:** Step 5 only ran because we prefixed the command with
+`PYTHONPATH=/Library/AutoPkg`. `PYTHONPATH` is just one way to fill **`sys.path`**
+— the list of folders Python searches, in order, whenever you `import` something.
+We can add that folder from inside the script instead:
+
+```python
+import sys
+sys.path.insert(0, "/Library/AutoPkg")   # look here first when importing
+```
+
+With `/Library/AutoPkg` on `sys.path`, `import autopkglib` now succeeds on its
+own, so the command drops back to a plain
+`/usr/local/autopkg/python stages/06_sys_path.py` — and every step after this one
+stays that simple.
+
+Two things worth noticing:
+
+- **Order matters.** The `sys.path` line must run *before* `from autopkglib
+  import …`, because Python searches `sys.path` at the instant of the import.
+  Putting an import below other code is what trips the linter rule `E402`, so it
+  carries a `# noqa: E402` — the same exception real AutoPkg processors use when
+  they do this.
+- This is a convenience for running our **stage files** by hand. The finished
+  processor in Step 10 drops it again: when AutoPkg runs your recipe it has
+  already put `autopkglib` on the path, so a shipped processor never hard-codes it.
+
+Python internals aren't the goal here, but this one earns its keep immediately —
+every remaining step is now just `/usr/local/autopkg/python stages/…`.
+
+## Step 7 — log with `self.output()` instead of `print()`
 
 ```python
 class HelloWorld(Processor):
@@ -221,7 +304,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/06_self_output.py
+/usr/local/autopkg/python stages/07_self_output.py
 #  HelloWorld: Hello World!
 ```
 
@@ -236,7 +319,7 @@ which is why we now create the instance with a dictionary: `HelloWorld({"verbose
 we're standing in for AutoPkg. Set `verbose` to `0` and the line disappears,
 exactly like a non-verbose `autopkg run`.
 
-## Step 7 — accept input from the recipe
+## Step 8 — accept input from the recipe
 
 ```python
 class HelloWorld(Processor):
@@ -259,7 +342,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/07_inputs.py
+/usr/local/autopkg/python stages/08_inputs.py
 #  HelloWorld: Hello MacAdmins!
 ```
 
@@ -274,7 +357,7 @@ We pass `greeting_name` in through the env dict here, just like a recipe's
 `Arguments:` will. Change the value and the output changes — without touching
 `main()`. That parameterization is the entire point of a processor.
 
-## Step 8 — produce a result for the next step
+## Step 9 — produce a result for the next step
 
 ```python
 class HelloWorld(Processor):
@@ -305,7 +388,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/08_outputs.py
+/usr/local/autopkg/python stages/09_outputs.py
 #  HelloWorld: Hello MacAdmins!
 #  greeting_result is now: Hello MacAdmins!
 ```
@@ -316,11 +399,13 @@ that output in `output_variables`. Anything in `self.env` is visible to every
 later step (and shown by `autopkg run -vv`). The last two lines peek into the
 environment to prove the value is sitting there, ready for the next processor.
 
-## Step 9 — the boilerplate, and running it for real
+## Step 10 — the boilerplate, and running it for real
 
-Steps 1–8 are the whole idea. A shipped processor just adds a bit of
-conventional boilerplate around it. Here is the finished
-[`HelloWorld.py`](HelloWorld.py):
+Steps 1–9 are the whole idea. A shipped processor just adds a bit of
+conventional boilerplate around it — and drops the Step 6 `sys.path` line, since
+when AutoPkg runs your recipe it already has `autopkglib` on the path (that's why
+the `autopkg run` below needs neither `PYTHONPATH` nor a `sys.path` tweak). Here
+is the finished [`HelloWorld.py`](HelloWorld.py):
 
 ```python
 #!/usr/local/autopkg/python
@@ -401,12 +486,14 @@ autopkg run -v HelloWorld.recipe.yaml --search-dir .
 `--search-dir .` tells AutoPkg to look in this folder for both the recipe and
 the `HelloWorld` processor it references. The recipe's `Arguments:` become keys
 in `self.env` before `main()` runs — the same hand-off we faked by hand in
-Steps 7–8, now done by AutoPkg for real. 🎉
+Steps 8–9, now done by AutoPkg for real. 🎉
 
 ### (Optional) Run the processor standalone
 
 `execute_shell()` reads an input plist from **stdin**, so feed it empty input
-and pass arguments as `key=value`:
+and pass arguments as `key=value`. (The shipped file dropped the Step 6 `sys.path`
+line, so we prefix `PYTHONPATH` again here — or paste those two lines back in to
+run it bare.)
 
 ```bash
 echo -n "" | PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python HelloWorld.py greeting_name=MacAdmins verbose=1
@@ -427,12 +514,14 @@ time, the questions AutoPkg needs answered:
 2. **When does it run?** → only under the `if __name__ == "__main__"` guard, so
    that importing the file (as AutoPkg does) doesn't fire it (Step 4)
 3. **On what?** → a class that subclasses `Processor` (Steps 3, 5)
-4. **How do you talk to the run?** → `self.output()`, reading verbosity from
-   `self.env` (Step 6)
-5. **What goes in?** → `input_variables`, read from `self.env` (Step 7)
-6. **What comes out?** → `output_variables`, written to `self.env` (Step 8)
-7. **How is it packaged and launched?** → the boilerplate + `execute_shell()`
-   (Step 9)
+4. **Where does Python find `autopkglib`?** → on `sys.path`; we add
+   `/Library/AutoPkg` to it so the later steps run without `PYTHONPATH` (Step 6)
+5. **How do you talk to the run?** → `self.output()`, reading verbosity from
+   `self.env` (Step 7)
+6. **What goes in?** → `input_variables`, read from `self.env` (Step 8)
+7. **What comes out?** → `output_variables`, written to `self.env` (Step 9)
+8. **How is it packaged and launched?** → the boilerplate + `execute_shell()`
+   (Step 10)
 
 None of it is magic — it's all in service of that one shared `self.env`
 dictionary moving down the list of processors in a recipe.

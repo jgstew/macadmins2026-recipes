@@ -15,7 +15,7 @@ from autopkglib import Processor
 
 class HelloWorld(Processor):
     def main(self):
-        print("Hello World!")
+        print("Hello World! (step 5)")
 
 
 # We keep the __main__ guard from Step 4. Standing in for AutoPkg, we make an

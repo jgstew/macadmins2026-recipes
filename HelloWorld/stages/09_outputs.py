@@ -1,6 +1,6 @@
-# Step 8 — produce a result later steps can use.
+# Step 9 — produce a result later steps can use.
 #
-# Run it:  PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/08_outputs.py
+# Run it:  /usr/local/autopkg/python stages/09_outputs.py
 #
 # A processor usually hands something to the next step in the recipe. We build
 # the greeting, then store it back in self.env under a name we declare in
@@ -10,15 +10,19 @@
 # The last lines peek into the environment afterward to prove the value is
 # really sitting there for the next step to pick up.
 
-from autopkglib import Processor
+import sys
+
+sys.path.insert(0, "/Library/AutoPkg")
+
+from autopkglib import Processor  # noqa: E402
 
 
 class HelloWorld(Processor):
     input_variables = {
         "greeting_name": {
             "required": False,
-            "default": "World",
-            "description": "Name to greet (default: World).",
+            "default": "World (step 9)",
+            "description": "Name to greet (default: World (step 9)).",
         },
     }
     output_variables = {
@@ -28,7 +32,7 @@ class HelloWorld(Processor):
     }
 
     def main(self):
-        greeting_name = self.env.get("greeting_name", "World")
+        greeting_name = self.env.get("greeting_name", "World (step 9)")
         greeting = f"Hello {greeting_name}!"
         self.output(greeting)
         self.env["greeting_result"] = greeting
@@ -36,6 +40,6 @@ class HelloWorld(Processor):
 
 # Stand in for AutoPkg, then inspect what landed in the shared environment.
 if __name__ == "__main__":
-    processor = HelloWorld({"verbose": 1, "greeting_name": "MacAdmins"})
+    processor = HelloWorld({"verbose": 1, "greeting_name": "MacAdmins (step 9)"})
     processor.main()
     print("greeting_result is now:", processor.env["greeting_result"])

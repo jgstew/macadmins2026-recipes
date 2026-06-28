@@ -10,7 +10,7 @@
 # For now we still call main() ourselves on the last line.
 
 def main():
-    print("Hello World!")
+    print("Hello World! (step 2)")
 
 
 main()
