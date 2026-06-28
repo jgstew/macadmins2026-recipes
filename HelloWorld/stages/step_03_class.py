@@ -1,10 +1,10 @@
 # Step 3 — make it a class with a main() method.
 #
-# Run it:  /usr/local/autopkg/python stages/03_class.py
+# Run it:  /usr/local/autopkg/python stages/step_03_class.py
 #
 # Or IMPORT it (from the HelloWorld/ folder) and watch it print anyway — the
 # very problem Step 4 fixes:
-#   PYTHONPATH=stages /usr/local/autopkg/python -c "__import__('03_class')"
+#   PYTHONPATH=stages /usr/local/autopkg/python -c "import step_03_class"
 #
 # AutoPkg processors are CLASSES. AutoPkg finds your processor by its class name
 # and calls .main() on an instance of it. So we wrap main() in a class named

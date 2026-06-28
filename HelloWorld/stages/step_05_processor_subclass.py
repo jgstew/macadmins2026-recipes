@@ -1,6 +1,6 @@
 # Step 5 — inherit from autopkglib.Processor.
 #
-# Run it:  PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/05_processor_subclass.py
+# Run it:  PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/step_05_processor_subclass.py
 #
 # Subclassing Processor is what turns "a class" into "an AutoPkg processor." It
 # inherits all the machinery AutoPkg relies on: the self.env environment,

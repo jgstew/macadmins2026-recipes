@@ -1,6 +1,6 @@
 # Step 7 — log with self.output() instead of print().
 #
-# Run it:  /usr/local/autopkg/python stages/07_self_output.py
+# Run it:  /usr/local/autopkg/python stages/step_07_self_output.py
 #   (No PYTHONPATH needed — the Step 6 sys.path line, kept below, handles it.)
 #
 # print() always writes to stdout and ignores AutoPkg entirely. self.output() is

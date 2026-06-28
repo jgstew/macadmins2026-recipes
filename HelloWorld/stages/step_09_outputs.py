@@ -1,6 +1,6 @@
 # Step 9 — produce a result later steps can use.
 #
-# Run it:  /usr/local/autopkg/python stages/09_outputs.py
+# Run it:  /usr/local/autopkg/python stages/step_09_outputs.py
 #
 # A processor usually hands something to the next step in the recipe. We build
 # the greeting, then store it back in self.env under a name we declare in

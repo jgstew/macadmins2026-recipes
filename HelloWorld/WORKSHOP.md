@@ -67,10 +67,10 @@ Then work from inside this workshop folder:
 cd HelloWorld
 ```
 
-Almost every command is just `/usr/local/autopkg/python stages/0X.py`:
+Almost every command is just `/usr/local/autopkg/python stages/step_0X.py`:
 
 ```bash
-/usr/local/autopkg/python stages/01_hello.py
+/usr/local/autopkg/python stages/step_01_hello.py
 ```
 
 The one exception is **Step 5** for reasons that will be explained then.
@@ -84,7 +84,7 @@ print("Hello World! (step 1)")
 ```
 
 ```bash
-/usr/local/autopkg/python stages/01_hello.py
+/usr/local/autopkg/python stages/step_01_hello.py
 #  Hello World! (step 1)
 ```
 
@@ -103,7 +103,7 @@ main()
 ```
 
 ```bash
-/usr/local/autopkg/python stages/02_function.py
+/usr/local/autopkg/python stages/step_02_function.py
 #  Hello World! (step 2)
 ```
 
@@ -125,7 +125,7 @@ HelloWorld().main()
 ```
 
 ```bash
-/usr/local/autopkg/python stages/03_class.py
+/usr/local/autopkg/python stages/step_03_class.py
 #  Hello World! (step 3)
 ```
 
@@ -138,7 +138,7 @@ But watch what that last line costs us. Instead of *running* the file, *import*
 it:
 
 ```bash
-PYTHONPATH=stages /usr/local/autopkg/python -c "__import__('03_class')"
+PYTHONPATH=stages /usr/local/autopkg/python -c "import step_03_class"
 #  Hello World! (step 3)
 ```
 
@@ -148,9 +148,12 @@ is top-level code. That matters because AutoPkg loads a processor by *importing*
 it: our greeting would fire at import time, before AutoPkg is ready to run the
 recipe. Step 4 fixes exactly this.
 
-(Two notes on that command: `PYTHONPATH=stages` tells Python where to find the
-module to import — running a file by its path, as above, doesn't need it; and we
-write `__import__('03_class')` because a module name can't start with a digit.)
+(`PYTHONPATH=stages` tells Python where to find the module to import — running a
+file by its path, as above, doesn't need it. And the stage files are named
+`step_NN_…` on purpose: a module name can't start with a digit, so `import
+03_class` would be a syntax error while `import step_03_class` just works. It's
+the same reason a real processor's file is named after its class, like
+`HelloWorld.py` — so AutoPkg can import it.)
 
 ## Step 4 — only run when the file is executed directly
 
@@ -165,7 +168,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-/usr/local/autopkg/python stages/04_main_guard.py
+/usr/local/autopkg/python stages/step_04_main_guard.py
 #  Hello World! (step 4)
 ```
 
@@ -178,7 +181,7 @@ processor.
 
 `if __name__ == "__main__":` is the guard. Python sets the built-in variable
 `__name__` to the string `"__main__"` **only** when the file is run directly
-(`/usr/local/autopkg/python stages/04_main_guard.py`). When the file is *imported*, `__name__` is
+(`/usr/local/autopkg/python stages/step_04_main_guard.py`). When the file is *imported*, `__name__` is
 the module's name instead, so the guarded line is skipped:
 
 - **run it directly** → `__name__ == "__main__"` → `main()` runs (handy for testing)
@@ -188,7 +191,7 @@ the module's name instead, so the guarded line is skipped:
 Prove it with the same import from Step 3 — this time it stays silent:
 
 ```bash
-PYTHONPATH=stages /usr/local/autopkg/python -c "__import__('04_main_guard')"
+PYTHONPATH=stages /usr/local/autopkg/python -c "import step_04_main_guard"
 #  (no output — the guard skipped main() because __name__ wasn't "__main__")
 ```
 
@@ -213,7 +216,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/05_processor_subclass.py
+PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/step_05_processor_subclass.py
 #  Hello World! (step 5)
 ```
 
@@ -249,7 +252,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-/usr/local/autopkg/python stages/06_sys_path.py
+/usr/local/autopkg/python stages/step_06_sys_path.py
 #  Hello World! (step 6)
 ```
 
@@ -265,7 +268,7 @@ sys.path.insert(0, "/Library/AutoPkg")   # look here first when importing
 
 With `/Library/AutoPkg` on `sys.path`, `import autopkglib` now succeeds on its
 own, so the command drops back to a plain
-`/usr/local/autopkg/python stages/06_sys_path.py` — and every step after this one
+`/usr/local/autopkg/python stages/step_06_sys_path.py` — and every step after this one
 stays that simple.
 
 Two things worth noticing:
@@ -280,7 +283,7 @@ Two things worth noticing:
   already put `autopkglib` on the path, so a shipped processor never hard-codes it.
 
 Python internals aren't the goal here, but this one earns its keep immediately —
-every remaining step is now just `/usr/local/autopkg/python stages/…`.
+every remaining step is now just `/usr/local/autopkg/python stages/step_…`.
 
 ## Step 7 — log with `self.output()` instead of `print()`
 
@@ -295,7 +298,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-/usr/local/autopkg/python stages/07_self_output.py
+/usr/local/autopkg/python stages/step_07_self_output.py
 #  HelloWorld: Hello World! (step 7)
 ```
 
@@ -333,7 +336,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-/usr/local/autopkg/python stages/08_inputs.py
+/usr/local/autopkg/python stages/step_08_inputs.py
 #  HelloWorld: Hello MacAdmins (step 8)!
 ```
 
@@ -379,7 +382,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-/usr/local/autopkg/python stages/09_outputs.py
+/usr/local/autopkg/python stages/step_09_outputs.py
 #  HelloWorld: Hello MacAdmins (step 9)!
 #  greeting_result is now: Hello MacAdmins (step 9)!
 ```

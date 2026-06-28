@@ -24,7 +24,7 @@ _(More workshops can be added as sibling folders alongside `HelloWorld/`.)_
 cd HelloWorld
 
 # Step 1 — a plain script (AutoPkg's bundled Python runs everything)
-/usr/local/autopkg/python stages/01_hello.py
+/usr/local/autopkg/python stages/step_01_hello.py
 
 # Step 10 — the finished processor, run inside a recipe
 autopkg run -v HelloWorld.recipe.yaml --search-dir .
@@ -36,7 +36,7 @@ autopkg run -v HelloWorld.recipe.yaml --search-dir .
 macadmins2026-recipes/
 └── HelloWorld/                    # one workshop, self-contained
     ├── WORKSHOP.md                # the guided, step-by-step build (start here)
-    ├── stages/01_*.py … 09_*.py   # runnable snapshot at each step
+    ├── stages/step_01_*.py … step_09_*.py   # runnable snapshot at each step
     ├── HelloWorld.py              # the finished processor (Step 10)
     └── HelloWorld.recipe.yaml     # a recipe that runs it
 ```

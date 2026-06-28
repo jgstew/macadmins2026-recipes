@@ -1,9 +1,9 @@
 # Step 4 — only run when executed directly: if __name__ == "__main__".
 #
-# Run it:  /usr/local/autopkg/python stages/04_main_guard.py
+# Run it:  /usr/local/autopkg/python stages/step_04_main_guard.py
 #
 # Now IMPORT it the way Step 3 did — this time it stays silent (the guard works):
-#   PYTHONPATH=stages /usr/local/autopkg/python -c "__import__('04_main_guard')"
+#   PYTHONPATH=stages /usr/local/autopkg/python -c "import step_04_main_guard"
 #
 # In Step 3 the last line, HelloWorld().main(), ran the moment Python read the
 # file — including when the file is IMPORTED. And importing is exactly how

@@ -1,6 +1,6 @@
 # Step 8 — accept input from the recipe.
 #
-# Run it:  /usr/local/autopkg/python stages/08_inputs.py
+# Run it:  /usr/local/autopkg/python stages/step_08_inputs.py
 #
 # A hardcoded "World" isn't useful. input_variables DECLARES what a recipe is
 # allowed to pass in: each input's name, whether it is required, a default when

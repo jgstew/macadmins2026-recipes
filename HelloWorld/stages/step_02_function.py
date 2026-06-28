@@ -1,6 +1,6 @@
 # Step 2 — move the work into a function.
 #
-# Run it:  /usr/local/autopkg/python stages/02_function.py
+# Run it:  /usr/local/autopkg/python stages/step_02_function.py
 #
 # AutoPkg needs a named entry point it can call WHEN IT CHOOSES, not code that
 # runs the instant the file is read. (AutoPkg imports your file; any work left

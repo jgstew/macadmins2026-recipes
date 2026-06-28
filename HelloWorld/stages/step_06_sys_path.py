@@ -1,6 +1,6 @@
 # Step 6 — stop typing PYTHONPATH: add /Library/AutoPkg to the path in code.
 #
-# Run it:  /usr/local/autopkg/python stages/06_sys_path.py
+# Run it:  /usr/local/autopkg/python stages/step_06_sys_path.py
 #
 # Step 5 only ran if you prefixed the command with PYTHONPATH=/Library/AutoPkg.
 # PYTHONPATH is just one way to fill sys.path — the list of folders Python
