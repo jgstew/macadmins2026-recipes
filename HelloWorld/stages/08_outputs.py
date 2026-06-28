@@ -1,6 +1,6 @@
 # Step 8 — produce a result later steps can use.
 #
-# Run it:  PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/08_outputs.py
+# Run it:  PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/08_outputs.py
 #
 # A processor usually hands something to the next step in the recipe. We build
 # the greeting, then store it back in self.env under a name we declare in

@@ -1,14 +1,14 @@
 # Step 5 — inherit from autopkglib.Processor.
 #
-# Run it:  PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/05_processor_subclass.py
+# Run it:  PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/05_processor_subclass.py
 #
 # Subclassing Processor is what turns "a class" into "an AutoPkg processor." It
 # inherits all the machinery AutoPkg relies on: the self.env environment,
 # self.output() logging, argument handling, and the standalone run entry point.
 #
-# Notice the run command changed. The file now imports autopkglib, so Python has
-# to be able to FIND AutoPkg (that is the PYTHONPATH) and we use the Python that
-# ships with AutoPkg (it already has AutoPkg's dependencies, like pyyaml).
+# Notice the run command grew a PYTHONPATH. The file now imports autopkglib,
+# which the installer placed in /Library/AutoPkg -- not on the bundled Python's
+# default search path -- so PYTHONPATH=/Library/AutoPkg points Python at it.
 
 from autopkglib import Processor
 

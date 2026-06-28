@@ -1,6 +1,6 @@
 # Step 6 — log with self.output() instead of print().
 #
-# Run it:  PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/06_self_output.py
+# Run it:  PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/06_self_output.py
 #
 # print() always writes to stdout and ignores AutoPkg entirely. self.output() is
 # AutoPkg's logging: it tags the line with the processor name and only shows it

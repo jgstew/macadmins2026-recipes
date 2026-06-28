@@ -15,17 +15,18 @@ _(More workshops can be added as sibling folders alongside `HelloWorld/`.)_
 
 ## Quick start
 
-```bash
-# AutoPkg's code, cloned next to this repo (so Python can import autopkglib)
-git clone https://github.com/autopkg/autopkg.git ../autopkg
+1. Install AutoPkg (it brings its own Python plus `autopkglib`): download
+   `autopkg-2.9.0.pkg` from
+   <https://github.com/autopkg/autopkg/releases/tag/v2.9.0> and run it.
+2. Then:
 
-# pick a workshop folder and follow its WORKSHOP.md
+```bash
 cd HelloWorld
 
-# Step 1 — a plain script
-python3 stages/01_hello.py
+# Step 1 — a plain script (AutoPkg's bundled Python runs everything)
+/usr/local/autopkg/python stages/01_hello.py
 
-# Step 8 — the finished processor, run inside a recipe
+# Step 9 — the finished processor, run inside a recipe
 autopkg run -v HelloWorld.recipe.yaml --search-dir .
 ```
 
@@ -36,6 +37,6 @@ macadmins2026-recipes/
 └── HelloWorld/                    # one workshop, self-contained
     ├── WORKSHOP.md                # the guided, step-by-step build (start here)
     ├── stages/01_*.py … 08_*.py   # runnable snapshot at each step
-    ├── HelloWorld.py              # the finished processor (Step 8)
+    ├── HelloWorld.py              # the finished processor (Step 9)
     └── HelloWorld.recipe.yaml     # a recipe that runs it
 ```

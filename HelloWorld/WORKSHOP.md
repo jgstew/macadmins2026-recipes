@@ -47,42 +47,39 @@ below is us building exactly that, and seeing why each piece is needed.
 
 ## Setup
 
-You need AutoPkg's code so Python can `import autopkglib`. Clone it next to this
-repo, then move into this workshop's folder — every command below is run from
-`HelloWorld/`:
+These scripts import `autopkglib`, the code that powers AutoPkg. The easiest way
+to get it — plus a Python that can run it — is to install AutoPkg itself.
+
+Download and run the installer package (this workshop targets **v2.9.0**):
+
+- **<https://github.com/autopkg/autopkg/releases/tag/v2.9.0>** → download
+  `autopkg-2.9.0.pkg` and double-click to install.
+
+That installs, among other things:
+
+- **`/usr/local/autopkg/python`** — the Python AutoPkg ships with. We run *every*
+  script below with it, starting at Step 1, so the interpreter never changes.
+- **`/Library/AutoPkg/`** — where `autopkglib` and the `autopkg` command live.
+
+Then work from inside this workshop folder:
 
 ```bash
-# from the repo root: clone AutoPkg next to the repo
-git clone https://github.com/autopkg/autopkg.git ../autopkg
-
-# then work from inside this workshop folder
 cd HelloWorld
 ```
 
-That leaves you with:
+Two forms of run command show up below:
 
-```
-Projects/
-├── autopkg/                       # AutoPkg's code
-└── macadmins2026-recipes/
-    └── HelloWorld/   ← run commands from here
-```
-
-Two run commands show up below:
-
-- **Plain Python** (Steps 1–4, no AutoPkg yet):
+- **Steps 1–4** don't import `autopkglib`, so the bundled Python by itself is enough:
   ```bash
-  python3 stages/01_hello.py
+  /usr/local/autopkg/python stages/01_hello.py
   ```
-- **With AutoPkg** (Steps 5+, the file imports `autopkglib`):
+- **Steps 5+** import `autopkglib`. The installer put it in `/Library/AutoPkg`,
+  which isn't on the Python's default search path, so we point Python at it with
+  `PYTHONPATH`:
   ```bash
-  PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/05_processor_subclass.py
+  PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/05_processor_subclass.py
   ```
-  `PYTHONPATH=../../autopkg/Code` lets Python find `autopkglib` (two levels up —
-  out of `HelloWorld/`, out of the repo, into `autopkg/`); the bundled
-  `/usr/local/autopkg/python` is used because it already has AutoPkg's
-  dependencies (like pyyaml). Each stage file repeats its own run command in a
-  comment at the top.
+  Each stage file repeats its own run command in a comment at the top.
 
 ---
 
@@ -93,7 +90,7 @@ print("Hello World!")
 ```
 
 ```bash
-python3 stages/01_hello.py
+/usr/local/autopkg/python stages/01_hello.py
 #  Hello World!
 ```
 
@@ -112,7 +109,7 @@ main()
 ```
 
 ```bash
-python3 stages/02_function.py
+/usr/local/autopkg/python stages/02_function.py
 #  Hello World!
 ```
 
@@ -134,7 +131,7 @@ HelloWorld().main()
 ```
 
 ```bash
-python3 stages/03_class.py
+/usr/local/autopkg/python stages/03_class.py
 #  Hello World!
 ```
 
@@ -158,7 +155,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-python3 stages/04_main_guard.py
+/usr/local/autopkg/python stages/04_main_guard.py
 #  Hello World!
 ```
 
@@ -171,7 +168,7 @@ processor.
 
 `if __name__ == "__main__":` is the guard. Python sets the built-in variable
 `__name__` to the string `"__main__"` **only** when the file is run directly
-(`python3 stages/04_main_guard.py`). When the file is *imported*, `__name__` is
+(`/usr/local/autopkg/python stages/04_main_guard.py`). When the file is *imported*, `__name__` is
 the module's name instead, so the guarded line is skipped:
 
 - **run it directly** → `__name__ == "__main__"` → `main()` runs (handy for testing)
@@ -196,7 +193,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/05_processor_subclass.py
+PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/05_processor_subclass.py
 #  Hello World!
 ```
 
@@ -204,9 +201,12 @@ PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/05_processor_subc
 Subclassing `Processor` inherits the machinery AutoPkg relies on — the `self.env`
 environment, `self.output()`, argument handling, and a standalone entry point.
 
-Notice the run command got longer: the moment we `import autopkglib`, Python has
-to be able to *find* AutoPkg (`PYTHONPATH`) and run on a Python that has its
-dependencies. A processor is still just Python — it simply depends on AutoPkg.
+Notice the run command grew a `PYTHONPATH`: the moment we `import autopkglib`,
+Python has to be able to *find* it. The installer put it in `/Library/AutoPkg`,
+which isn't on the bundled Python's default search path, so
+`PYTHONPATH=/Library/AutoPkg` points Python there. (The `autopkg` command itself
+doesn't need this — its own script lives inside `/Library/AutoPkg`.) A processor
+is still just Python — it simply depends on `autopkglib`.
 
 ## Step 6 — log with `self.output()` instead of `print()`
 
@@ -221,7 +221,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/06_self_output.py
+PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/06_self_output.py
 #  HelloWorld: Hello World!
 ```
 
@@ -259,7 +259,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/07_inputs.py
+PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/07_inputs.py
 #  HelloWorld: Hello MacAdmins!
 ```
 
@@ -305,7 +305,7 @@ if __name__ == "__main__":
 ```
 
 ```bash
-PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/08_outputs.py
+PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/08_outputs.py
 #  HelloWorld: Hello MacAdmins!
 #  greeting_result is now: Hello MacAdmins!
 ```
@@ -409,7 +409,7 @@ Steps 7–8, now done by AutoPkg for real. 🎉
 and pass arguments as `key=value`:
 
 ```bash
-echo -n "" | PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python HelloWorld.py greeting_name=MacAdmins verbose=1
+echo -n "" | PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python HelloWorld.py greeting_name=MacAdmins verbose=1
 ```
 
 It prints `HelloWorld: Hello MacAdmins!` and dumps the resulting environment

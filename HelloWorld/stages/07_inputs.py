@@ -1,6 +1,6 @@
 # Step 7 — accept input from the recipe.
 #
-# Run it:  PYTHONPATH=../../autopkg/Code /usr/local/autopkg/python stages/07_inputs.py
+# Run it:  PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/07_inputs.py
 #
 # A hardcoded "World" isn't useful. input_variables DECLARES what a recipe is
 # allowed to pass in: each input's name, whether it is required, a default when
