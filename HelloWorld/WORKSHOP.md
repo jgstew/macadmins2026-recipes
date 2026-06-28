@@ -73,39 +73,30 @@ Almost every command is just `/usr/local/autopkg/python stages/0X.py`:
 /usr/local/autopkg/python stages/01_hello.py
 ```
 
-The one exception is **Step 5**, the first step to `import autopkglib`. The
-installer put `autopkglib` in `/Library/AutoPkg`, which isn't on Python's default
-search path, so that single command needs a `PYTHONPATH` prefix:
-
-```bash
-PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/05_processor_subclass.py
-```
-
-**Step 6** then folds that path into the script itself, so Steps 6–9 go back to
-the plain form. Each stage file shows its exact command at the top.
+The one exception is **Step 5** for reasons that will be explained then.
 
 ---
 
 ## Step 1 — a plain script
 
 ```python
-print("Hello World!")
+print("Hello World! (step 1)")
 ```
 
 ```bash
 /usr/local/autopkg/python stages/01_hello.py
-#  Hello World!
+#  Hello World! (step 1)
 ```
 
 It runs. But it is **not** an AutoPkg processor — AutoPkg can't hand it any
 values and can't get anything back out of it. AutoPkg doesn't run scripts; it
-runs processors. So let's become one.
+runs processors. So let's work to become one.
 
 ## Step 2 — put the work in a `main()` function
 
 ```python
 def main():
-    print("Hello World!")
+    print("Hello World! (step 2)")
 
 
 main()
@@ -113,7 +104,7 @@ main()
 
 ```bash
 /usr/local/autopkg/python stages/02_function.py
-#  Hello World!
+#  Hello World! (step 2)
 ```
 
 **Why:** AutoPkg needs a named entry point it can call *when it decides to* —
@@ -127,7 +118,7 @@ for. For now we still call `main()` ourselves on the last line.
 ```python
 class HelloWorld:
     def main(self):
-        print("Hello World!")
+        print("Hello World! (step 3)")
 
 
 HelloWorld().main()
@@ -135,7 +126,7 @@ HelloWorld().main()
 
 ```bash
 /usr/local/autopkg/python stages/03_class.py
-#  Hello World!
+#  Hello World! (step 3)
 ```
 
 **Why:** AutoPkg processors are **classes**. AutoPkg locates your processor by
@@ -148,7 +139,7 @@ it:
 
 ```bash
 PYTHONPATH=stages /usr/local/autopkg/python -c "__import__('03_class')"
-#  Hello World!
+#  Hello World! (step 3)
 ```
 
 We never called anything — we only imported the module — yet it still printed.
@@ -166,7 +157,7 @@ write `__import__('03_class')` because a module name can't start with a digit.)
 ```python
 class HelloWorld:
     def main(self):
-        print("Hello World!")
+        print("Hello World! (step 4)")
 
 
 if __name__ == "__main__":
@@ -175,7 +166,7 @@ if __name__ == "__main__":
 
 ```bash
 /usr/local/autopkg/python stages/04_main_guard.py
-#  Hello World!
+#  Hello World! (step 4)
 ```
 
 **Why:** Until now, `HelloWorld().main()` sat at the top level, so it ran the
@@ -201,8 +192,8 @@ PYTHONPATH=stages /usr/local/autopkg/python -c "__import__('04_main_guard')"
 #  (no output — the guard skipped main() because __name__ wasn't "__main__")
 ```
 
-Run it directly, though, and it still prints `Hello World!`. That's the goal:
-**importable with no side effects, runnable on demand.**
+Run it directly, though, and it still prints `Hello World! (step 4)`. That's the
+goal: **importable with no side effects, runnable on demand.**
 
 Every step from here keeps this guard.
 
@@ -214,7 +205,7 @@ from autopkglib import Processor
 
 class HelloWorld(Processor):
     def main(self):
-        print("Hello World!")
+        print("Hello World! (step 5)")
 
 
 if __name__ == "__main__":
@@ -223,7 +214,7 @@ if __name__ == "__main__":
 
 ```bash
 PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/05_processor_subclass.py
-#  Hello World!
+#  Hello World! (step 5)
 ```
 
 **Why:** This is the change that turns "a class" into "an AutoPkg processor."
@@ -250,7 +241,7 @@ from autopkglib import Processor  # noqa: E402
 
 class HelloWorld(Processor):
     def main(self):
-        print("Hello World!")
+        print("Hello World! (step 6)")
 
 
 if __name__ == "__main__":
@@ -259,7 +250,7 @@ if __name__ == "__main__":
 
 ```bash
 /usr/local/autopkg/python stages/06_sys_path.py
-#  Hello World!
+#  Hello World! (step 6)
 ```
 
 **Why:** Step 5 only ran because we prefixed the command with
@@ -296,7 +287,7 @@ every remaining step is now just `/usr/local/autopkg/python stages/…`.
 ```python
 class HelloWorld(Processor):
     def main(self):
-        self.output("Hello World!")
+        self.output("Hello World! (step 7)")
 
 
 if __name__ == "__main__":
@@ -305,7 +296,7 @@ if __name__ == "__main__":
 
 ```bash
 /usr/local/autopkg/python stages/07_self_output.py
-#  HelloWorld: Hello World!
+#  HelloWorld: Hello World! (step 7)
 ```
 
 **Why:** `print()` always dumps to stdout and ignores AutoPkg. `self.output()`
@@ -326,24 +317,24 @@ class HelloWorld(Processor):
     input_variables = {
         "greeting_name": {
             "required": False,
-            "default": "World",
-            "description": "Name to greet (default: World).",
+            "default": "World (step 8)",
+            "description": "Name to greet (default: World (step 8)).",
         },
     }
     output_variables = {}
 
     def main(self):
-        greeting_name = self.env.get("greeting_name", "World")
+        greeting_name = self.env.get("greeting_name", "World (step 8)")
         self.output(f"Hello {greeting_name}!")
 
 
 if __name__ == "__main__":
-    HelloWorld({"verbose": 1, "greeting_name": "MacAdmins"}).main()
+    HelloWorld({"verbose": 1, "greeting_name": "MacAdmins (step 8)"}).main()
 ```
 
 ```bash
 /usr/local/autopkg/python stages/08_inputs.py
-#  HelloWorld: Hello MacAdmins!
+#  HelloWorld: Hello MacAdmins (step 8)!
 ```
 
 **Why:** A hardcoded greeting isn't worth much. `input_variables` **declares**
@@ -364,8 +355,8 @@ class HelloWorld(Processor):
     input_variables = {
         "greeting_name": {
             "required": False,
-            "default": "World",
-            "description": "Name to greet (default: World).",
+            "default": "World (step 9)",
+            "description": "Name to greet (default: World (step 9)).",
         },
     }
     output_variables = {
@@ -375,22 +366,22 @@ class HelloWorld(Processor):
     }
 
     def main(self):
-        greeting_name = self.env.get("greeting_name", "World")
+        greeting_name = self.env.get("greeting_name", "World (step 9)")
         greeting = f"Hello {greeting_name}!"
         self.output(greeting)
         self.env["greeting_result"] = greeting
 
 
 if __name__ == "__main__":
-    processor = HelloWorld({"verbose": 1, "greeting_name": "MacAdmins"})
+    processor = HelloWorld({"verbose": 1, "greeting_name": "MacAdmins (step 9)"})
     processor.main()
     print("greeting_result is now:", processor.env["greeting_result"])
 ```
 
 ```bash
 /usr/local/autopkg/python stages/09_outputs.py
-#  HelloWorld: Hello MacAdmins!
-#  greeting_result is now: Hello MacAdmins!
+#  HelloWorld: Hello MacAdmins (step 9)!
+#  greeting_result is now: Hello MacAdmins (step 9)!
 ```
 
 **Why:** A processor usually hands something to the next processor in the recipe.
