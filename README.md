@@ -35,8 +35,8 @@ autopkg run -v HelloWorld.recipe.yaml --search-dir .
 ```
 macadmins2026-recipes/
 └── HelloWorld/                    # one workshop, self-contained
-    ├── WORKSHOP.md                # the guided, step-by-step build (start here)
-    ├── stages/step_01_*.py … step_09_*.py   # runnable snapshot at each step
+    ├── WORKSHOP.md                # index: overview, setup, links to each step (start here)
+    ├── stages/                    # one step_NN_*.py + step_NN_*.md per step
     ├── HelloWorld.py              # the finished processor (Step 10)
     └── HelloWorld.recipe.yaml     # a recipe that runs it
 ```
