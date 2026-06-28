@@ -2,19 +2,19 @@
 
 A hands-on workshop. PSU MacAdmins 2026.
 
-We start with the most boring Python program there is:
+We are going to start with the simplest Python program there is:
 
 ```python
 print("Hello World!")
 ```
 
-…and grow it, one small change at a time, into a real AutoPkg processor — the
-kind of thing you'd find in a recipe. The goal isn't to learn Python. It's to
-understand **what an AutoPkg processor actually is** and **why every line of the
-"boilerplate" is there**, so none of it feels like magic.
+Then we are going to change it, one step at a time, into a real AutoPkg processor
+— the kind of thing you'd find in a recipe. The goal isn't to learn Python. It's
+to understand **what an AutoPkg processor actually is** and **why each line of the
+"boilerplate" is there**.
 
-Each step is a runnable file in [`stages/`](stages). Run each one, watch what it
-does, then read *why* we made the change. The finished result is
+Each step is a runnable file in [`stages/`](stages). Run each one, see what it
+does, then read why we made that change. The finished result is
 [`HelloWorld.py`](HelloWorld.py) in this folder.
 
 ---
@@ -40,8 +40,9 @@ And a processor is just a **Python class** that:
 1. subclasses `autopkglib.Processor`, and
 2. has a `main()` method.
 
-AutoPkg finds your class, creates an instance, and calls `.main()`. Everything
-below is us building exactly that, and seeing why each piece is needed.
+AutoPkg finds your class, creates an instance, and calls `.main()`. The rest of
+this workshop builds exactly that, one piece at a time, and explains why each
+piece is needed.
 
 ---
 
@@ -107,11 +108,11 @@ main()
 #  Hello World! (step 2)
 ```
 
-**Why:** AutoPkg needs a named entry point it can call *when it decides to* —
-not code that runs the instant the file is read. (AutoPkg **imports** your file;
-anything sitting at the top level would fire during that import, before AutoPkg
-is ready.) We name it `main()` because that's the exact method AutoPkg will look
-for. For now we still call `main()` ourselves on the last line.
+**Why:** AutoPkg needs a named entry point it can call when it's ready — not code
+that runs the moment the file is read. (AutoPkg **imports** your file, and
+anything at the top level runs during that import, before AutoPkg is ready.) We
+name it `main()` because that is the exact method AutoPkg will call. For now we
+still call `main()` ourselves on the last line.
 
 ## Step 3 — make it a class
 
@@ -130,12 +131,12 @@ HelloWorld().main()
 ```
 
 **Why:** AutoPkg processors are **classes**. AutoPkg locates your processor by
-its class name and calls `.main()` on an instance of it. Wrapping `main()` in a
-class named `HelloWorld` is the shape AutoPkg expects. The last line —
-`HelloWorld().main()` — creates an instance and calls main() ourselves.
+its class name and calls `.main()` on an instance of it, so we put `main()` in a
+class named `HelloWorld`. The last line — `HelloWorld().main()` — creates an
+instance and calls main() ourselves.
 
-But watch what that last line costs us. Instead of *running* the file, *import*
-it:
+That last line is a problem, though. Instead of *running* the file, try
+*importing* it:
 
 ```bash
 PYTHONPATH=stages /usr/local/autopkg/python -c "import step_03_class"
@@ -195,8 +196,9 @@ PYTHONPATH=stages /usr/local/autopkg/python -c "import step_04_main_guard"
 #  (no output — the guard skipped main() because __name__ wasn't "__main__")
 ```
 
-Run it directly, though, and it still prints `Hello World! (step 4)`. That's the
-goal: **importable with no side effects, runnable on demand.**
+Run it directly, though, and it still prints `Hello World! (step 4)`. That is
+what we want: the file can be imported without doing anything, and still runs
+when you call it directly.
 
 Every step from here keeps this guard.
 
@@ -282,8 +284,8 @@ Two things worth noticing:
   processor in Step 10 drops it again: when AutoPkg runs your recipe it has
   already put `autopkglib` on the path, so a shipped processor never hard-codes it.
 
-Python internals aren't the goal here, but this one earns its keep immediately —
-every remaining step is now just `/usr/local/autopkg/python stages/step_…`.
+Python internals aren't the goal here, but this change is worth it: every
+remaining step is now just `/usr/local/autopkg/python stages/step_…`.
 
 ## Step 7 — log with `self.output()` instead of `print()`
 
@@ -306,7 +308,7 @@ if __name__ == "__main__":
 is AutoPkg's logging: it tags the line with the processor name (`HelloWorld:`)
 and only shows it when the run is verbose enough (the `-v` flags).
 
-Here's the key insight: `self.output()` decides whether to print by checking the
+The important detail: `self.output()` decides whether to print by checking the
 verbosity level **stored in `self.env`**. So it needs `self.env` to exist —
 which is why we now create the instance with a dictionary: `HelloWorld({"verbose":
 1})`. That dictionary is the environment AutoPkg normally provides; right now
@@ -479,8 +481,8 @@ autopkg run -v HelloWorld.recipe.yaml --search-dir .
 
 `--search-dir .` tells AutoPkg to look in this folder for both the recipe and
 the `HelloWorld` processor it references. The recipe's `Arguments:` become keys
-in `self.env` before `main()` runs — the same hand-off we faked by hand in
-Steps 8–9, now done by AutoPkg for real. 🎉
+in `self.env` before `main()` runs — the same hand-off we did by hand in
+Steps 8–9, now done by AutoPkg for real.
 
 ### (Optional) Run the processor standalone
 
@@ -517,8 +519,8 @@ time, the questions AutoPkg needs answered:
 8. **How is it packaged and launched?** → the boilerplate + `execute_shell()`
    (Step 10)
 
-None of it is magic — it's all in service of that one shared `self.env`
-dictionary moving down the list of processors in a recipe.
+It all comes down to that one shared `self.env` dictionary moving down the list
+of processors in a recipe.
 
 ## Where to go next
 
