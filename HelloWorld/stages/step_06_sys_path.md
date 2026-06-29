@@ -1,5 +1,7 @@
 # Step 6 — stop typing `PYTHONPATH`: set the search path in code
 
+We add `/Library/AutoPkg` to `sys.path` at the top of the script, so the import works without the `PYTHONPATH` prefix Step 5 needed.
+
 ```python
 import sys
 
@@ -16,6 +18,10 @@ class HelloWorld(Processor):
 if __name__ == "__main__":
     HelloWorld().main()
 ```
+
+See this code in the file here: [step_06_sys_path.py](step_06_sys_path.py)
+
+To run it:
 
 ```bash
 /usr/local/autopkg/python stages/step_06_sys_path.py

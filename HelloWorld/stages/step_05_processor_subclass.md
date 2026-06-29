@@ -1,5 +1,7 @@
 # Step 5 — subclass `Processor`
 
+We make `HelloWorld` subclass `Processor` from `autopkglib`.
+
 ```python
 from autopkglib import Processor
 
@@ -12,6 +14,10 @@ class HelloWorld(Processor):
 if __name__ == "__main__":
     HelloWorld().main()
 ```
+
+See this code in the file here: [step_05_processor_subclass.py](step_05_processor_subclass.py)
+
+To run it:
 
 ```bash
 PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/step_05_processor_subclass.py

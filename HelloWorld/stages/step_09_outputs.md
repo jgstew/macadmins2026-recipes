@@ -1,5 +1,7 @@
 # Step 9 — produce a result for the next step
 
+We declare an `output_variables` entry and write the greeting back into `self.env` so a later step can use it.
+
 ```python
 class HelloWorld(Processor):
     input_variables = {
@@ -27,6 +29,10 @@ if __name__ == "__main__":
     processor.main()
     print("greeting_result is now:", processor.env["greeting_result"])
 ```
+
+See this code in the file here: [step_09_outputs.py](step_09_outputs.py)
+
+To run it:
 
 ```bash
 /usr/local/autopkg/python stages/step_09_outputs.py

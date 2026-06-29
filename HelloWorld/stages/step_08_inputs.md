@@ -1,5 +1,7 @@
 # Step 8 — accept input from the recipe
 
+We declare an `input_variables` entry and read the greeting name from `self.env` instead of hardcoding it.
+
 ```python
 class HelloWorld(Processor):
     input_variables = {
@@ -19,6 +21,10 @@ class HelloWorld(Processor):
 if __name__ == "__main__":
     HelloWorld({"verbose": 1, "greeting_name": "MacAdmins (step 8)"}).main()
 ```
+
+See this code in the file here: [step_08_inputs.py](step_08_inputs.py)
+
+To run it:
 
 ```bash
 /usr/local/autopkg/python stages/step_08_inputs.py

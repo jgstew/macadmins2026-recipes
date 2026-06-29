@@ -1,5 +1,7 @@
 # Step 3 — make it a class
 
+We wrap `main()` in a class named `HelloWorld`, then make an instance and call it.
+
 ```python
 class HelloWorld:
     def main(self):
@@ -8,6 +10,10 @@ class HelloWorld:
 
 HelloWorld().main()
 ```
+
+See this code in the file here: [step_03_class.py](step_03_class.py)
+
+To run it:
 
 ```bash
 /usr/local/autopkg/python stages/step_03_class.py

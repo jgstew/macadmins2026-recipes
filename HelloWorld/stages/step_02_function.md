@@ -1,5 +1,7 @@
 # Step 2 — put the work in a `main()` function
 
+We move the work into a function named `main()`, and call it ourselves at the bottom.
+
 ```python
 def main():
     print("Hello World! (step 2)")
@@ -7,6 +9,10 @@ def main():
 
 main()
 ```
+
+See this code in the file here: [step_02_function.py](step_02_function.py)
+
+To run it:
 
 ```bash
 /usr/local/autopkg/python stages/step_02_function.py

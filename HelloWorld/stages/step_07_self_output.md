@@ -1,5 +1,7 @@
 # Step 7 — log with `self.output()` instead of `print()`
 
+We swap `print()` for `self.output()` — AutoPkg's logging — and give the instance an env dict to read from.
+
 ```python
 class HelloWorld(Processor):
     def main(self):
@@ -9,6 +11,10 @@ class HelloWorld(Processor):
 if __name__ == "__main__":
     HelloWorld({"verbose": 1}).main()
 ```
+
+See this code in the file here: [step_07_self_output.py](step_07_self_output.py)
+
+To run it:
 
 ```bash
 /usr/local/autopkg/python stages/step_07_self_output.py

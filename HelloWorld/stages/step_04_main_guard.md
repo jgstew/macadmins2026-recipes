@@ -1,5 +1,7 @@
 # Step 4 — only run when the file is executed directly
 
+We stop calling `HelloWorld().main()` directly and put it behind an `if __name__ == "__main__":` guard.
+
 ```python
 class HelloWorld:
     def main(self):
@@ -9,6 +11,10 @@ class HelloWorld:
 if __name__ == "__main__":
     HelloWorld().main()
 ```
+
+See this code in the file here: [step_04_main_guard.py](step_04_main_guard.py)
+
+To run it:
 
 ```bash
 /usr/local/autopkg/python stages/step_04_main_guard.py
