@@ -21,7 +21,7 @@ To run it:
 #  Hello World! (step 4)
 ```
 
-Or run it for you (both commands in this step): `bash stages/step_04_main_guard.sh`
+Or run it for you: `bash stages/step_04_main_guard.sh`
 
 **Why:** Until now, `HelloWorld().main()` sat at the top level, so it ran the
 instant Python read the file — *including when the file is imported*. And
@@ -45,6 +45,8 @@ Prove it with the same import from [Step 3](step_03_class.md) — this time it s
 PYTHONPATH=stages /usr/local/autopkg/python -c "import step_04_main_guard"
 #  (no output — the guard skipped main() because __name__ wasn't "__main__")
 ```
+
+Or run it for you: `bash stages/step_04_main_guard_import.sh`
 
 Run it directly, though, and it still prints `Hello World! (step 4)`. That is
 what we want: the file can be imported without doing anything, and still runs

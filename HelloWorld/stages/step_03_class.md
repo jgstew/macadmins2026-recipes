@@ -20,7 +20,7 @@ To run it:
 #  Hello World! (step 3)
 ```
 
-Or run it for you (both commands in this step): `bash stages/step_03_class.sh`
+Or run it for you: `bash stages/step_03_class.sh`
 
 **Why:** AutoPkg processors are **classes**. AutoPkg locates your processor by
 its class name and calls `.main()` on an instance of it, so we put `main()` in a
@@ -34,6 +34,8 @@ That last line is a problem, though. Instead of *running* the file, try
 PYTHONPATH=stages /usr/local/autopkg/python -c "import step_03_class"
 #  Hello World! (step 3)
 ```
+
+Or run it for you: `bash stages/step_03_class_import.sh`
 
 We never called anything — we only imported the module — yet it still printed.
 **Importing a module runs everything at its top level**, and `HelloWorld().main()`
