@@ -17,7 +17,9 @@
 # with a clear message (imported here so it is ready when you need it).
 from autopkglib import Processor, ProcessorError  # noqa: F401
 
-# __all__ lists this module's public names (the processor class).
+# __all__ lists the module's public names (what `from module import *` exports).
+# AutoPkg doesn't need it (it loads the class by name); shipped processors
+# include it by convention.
 __all__ = ["HelloWorld"]
 
 
