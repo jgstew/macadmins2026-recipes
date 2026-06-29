@@ -121,4 +121,4 @@ of processors in a recipe.
 
 Every processor in the wild is just more of this. For real, working examples —
 downloaders, version extractors, file hashers — see
-[jgstew-recipes/SharedProcessors](https://github.com/jgstew/jgstew-recipes/tree/main/SharedProcessors).
+[jgstew-recipes/SharedProcessors](https://github.com/autopkg/jgstew-recipes/tree/main/SharedProcessors).
