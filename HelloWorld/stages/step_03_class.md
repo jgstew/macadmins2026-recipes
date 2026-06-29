@@ -35,7 +35,7 @@ PYTHONPATH=stages /usr/local/autopkg/python -c "import step_03_class"
 #  Hello World! (step 3)
 ```
 
-Or run it for you: `bash stages/step_03_class_import.sh`
+Or run it for you: `bash stages/step_03_classimport.sh`
 
 We never called anything — we only imported the module — yet it still printed.
 **Importing a module runs everything at its top level**, and `HelloWorld().main()`

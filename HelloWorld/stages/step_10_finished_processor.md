@@ -100,7 +100,7 @@ run it bare.)
 echo -n "" | PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python HelloWorld.py greeting_name=MacAdmins verbose=1
 ```
 
-Or run it for you: `bash stages/step_10_finished_processor_standalone.sh`
+Or run it for you: `bash stages/step_10_finished_processorstandalone.sh`
 
 It prints `HelloWorld: Hello MacAdmins!` and dumps the resulting environment
 (including `greeting_result`) back out as a plist — exactly what it would hand to

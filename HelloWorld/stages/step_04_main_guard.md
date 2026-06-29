@@ -46,7 +46,7 @@ PYTHONPATH=stages /usr/local/autopkg/python -c "import step_04_main_guard"
 #  (no output — the guard skipped main() because __name__ wasn't "__main__")
 ```
 
-Or run it for you: `bash stages/step_04_main_guard_import.sh`
+Or run it for you: `bash stages/step_04_main_guardimport.sh`
 
 Run it directly, though, and it still prints `Hello World! (step 4)`. That is
 what we want: the file can be imported without doing anything, and still runs
