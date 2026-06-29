@@ -15,6 +15,8 @@ if __name__ == "__main__":
 #  Hello World! (step 4)
 ```
 
+Or run it for you (both commands in this step): `bash stages/step_04_main_guard.sh`
+
 **Why:** Until now, `HelloWorld().main()` sat at the top level, so it ran the
 instant Python read the file — *including when the file is imported*. And
 importing is exactly how AutoPkg loads your processor: it imports the module to

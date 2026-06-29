@@ -15,6 +15,8 @@ if __name__ == "__main__":
 #  HelloWorld: Hello World! (step 7)
 ```
 
+Or run it for you: `bash stages/step_07_self_output.sh`
+
 **Why:** `print()` always dumps to stdout and ignores AutoPkg. `self.output()`
 is AutoPkg's logging: it tags the line with the processor name (`HelloWorld:`)
 and only shows it when the run is verbose enough (the `-v` flags).

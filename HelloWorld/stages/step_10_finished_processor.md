@@ -82,6 +82,8 @@ autopkg run -v HelloWorld.recipe.yaml --search-dir .
 #  HelloWorld: Hello MacAdmins!
 ```
 
+Or run it for you (the recipe run and the standalone run below): `bash stages/step_10_finished_processor.sh`
+
 `--search-dir .` tells AutoPkg to look in this folder for both the recipe and
 the `HelloWorld` processor it references. The recipe's `Arguments:` become keys
 in `self.env` before `main()` runs — the same hand-off we did by hand in

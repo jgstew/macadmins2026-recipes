@@ -34,6 +34,8 @@ if __name__ == "__main__":
 #  greeting_result is now: Hello MacAdmins (step 9)!
 ```
 
+Or run it for you: `bash stages/step_09_outputs.sh`
+
 **Why:** A processor usually hands something to the next processor in the recipe.
 We store our greeting back into `self.env["greeting_result"]`, and **declare**
 that output in `output_variables`. Anything in `self.env` is visible to every

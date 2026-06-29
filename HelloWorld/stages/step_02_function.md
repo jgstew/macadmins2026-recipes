@@ -13,6 +13,8 @@ main()
 #  Hello World! (step 2)
 ```
 
+Or run it for you: `bash stages/step_02_function.sh`
+
 **Why:** AutoPkg needs a named entry point it can call when it's ready — not code
 that runs the moment the file is read. (AutoPkg **imports** your file, and
 anything at the top level runs during that import, before AutoPkg is ready.) We

@@ -14,6 +14,8 @@ HelloWorld().main()
 #  Hello World! (step 3)
 ```
 
+Or run it for you (both commands in this step): `bash stages/step_03_class.sh`
+
 **Why:** AutoPkg processors are **classes**. AutoPkg locates your processor by
 its class name and calls `.main()` on an instance of it, so we put `main()` in a
 class named `HelloWorld`. The last line — `HelloWorld().main()` — creates an

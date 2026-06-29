@@ -22,6 +22,8 @@ if __name__ == "__main__":
 #  Hello World! (step 6)
 ```
 
+Or run it for you: `bash stages/step_06_sys_path.sh`
+
 **Why:** [Step 5](step_05_processor_subclass.md) only ran because we prefixed the command with
 `PYTHONPATH=/Library/AutoPkg`. `PYTHONPATH` is just one way to fill **`sys.path`**
 — the list of folders Python searches, in order, whenever you `import` something.

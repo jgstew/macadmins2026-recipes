@@ -18,6 +18,8 @@ PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/step_05_processor_s
 #  Hello World! (step 5)
 ```
 
+Or run it for you: `bash stages/step_05_processor_subclass.sh`
+
 **Why:** This is the change that turns "a class" into "an AutoPkg processor."
 Subclassing `Processor` inherits the machinery AutoPkg relies on — the `self.env`
 environment, `self.output()`, argument handling, and a standalone entry point.

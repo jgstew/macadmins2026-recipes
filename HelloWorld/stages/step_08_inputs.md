@@ -25,6 +25,8 @@ if __name__ == "__main__":
 #  HelloWorld: Hello MacAdmins (step 8)!
 ```
 
+Or run it for you: `bash stages/step_08_inputs.sh`
+
 **Why:** A hardcoded greeting isn't worth much. `input_variables` **declares**
 what a recipe is allowed to pass in — each input's name, whether it's
 `required`, a `default` for when the recipe omits it, and a `description`
