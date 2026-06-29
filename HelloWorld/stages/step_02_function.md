@@ -21,4 +21,4 @@ still call `main()` ourselves on the last line.
 
 ---
 
-[← Step 1 — a plain script](step_01_hello.md) · [Workshop index](../WORKSHOP.md) · [Step 3 — make it a class →](step_03_class.md)
+[← Step 1 — a plain script](step_01_hello.md) · [Workshop index](../README.md) · [Step 3 — make it a class →](step_03_class.md)

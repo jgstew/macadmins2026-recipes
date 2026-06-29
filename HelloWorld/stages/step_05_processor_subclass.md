@@ -32,4 +32,4 @@ every command gets old fast, so [Step 6](step_06_sys_path.md) makes it unnecessa
 
 ---
 
-[← Step 4 — the `__main__` guard](step_04_main_guard.md) · [Workshop index](../WORKSHOP.md) · [Step 6 — set the search path →](step_06_sys_path.md)
+[← Step 4 — the `__main__` guard](step_04_main_guard.md) · [Workshop index](../README.md) · [Step 6 — set the search path →](step_06_sys_path.md)

@@ -42,4 +42,4 @@ environment to prove the value is sitting there, ready for the next processor.
 
 ---
 
-[← Step 8 — accept input](step_08_inputs.md) · [Workshop index](../WORKSHOP.md) · [Step 10 — the finished processor →](step_10_finished_processor.md)
+[← Step 8 — accept input](step_08_inputs.md) · [Workshop index](../README.md) · [Step 10 — the finished processor →](step_10_finished_processor.md)

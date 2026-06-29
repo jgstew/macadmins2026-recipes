@@ -28,4 +28,4 @@ exactly like a non-verbose `autopkg run`.
 
 ---
 
-[← Step 6 — set the search path](step_06_sys_path.md) · [Workshop index](../WORKSHOP.md) · [Step 8 — accept input →](step_08_inputs.md)
+[← Step 6 — set the search path](step_06_sys_path.md) · [Workshop index](../README.md) · [Step 8 — accept input →](step_08_inputs.md)

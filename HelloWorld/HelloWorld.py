@@ -7,7 +7,7 @@
 # This is stage 09 plus the conventional boilerplate every shipped processor
 # carries. Note there's no sys.path tweak (Step 6): when AutoPkg runs your recipe
 # it already has autopkglib on the path, so a shipped processor never hard-codes
-# it. WORKSHOP.md explains how we got here from a one-line script and what each
+# it. README.md explains how we got here from a one-line script and what each
 # piece below is for. The class name (HelloWorld) matches the file name
 # (HelloWorld.py) on purpose: that is how AutoPkg locates the processor.
 #
@@ -51,7 +51,7 @@ class HelloWorld(Processor):
 
 # Lets you run the file directly (AutoPkg-style) for quick testing. execute_shell
 # reads an input plist from stdin, applies defaults, calls main(), and writes the
-# resulting environment back out as a plist. See WORKSHOP.md for how to feed it.
+# resulting environment back out as a plist. See README.md for how to feed it.
 if __name__ == "__main__":
     PROCESSOR = HelloWorld()
     PROCESSOR.execute_shell()

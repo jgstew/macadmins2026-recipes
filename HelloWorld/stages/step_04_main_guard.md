@@ -46,4 +46,4 @@ Every step from here keeps this guard.
 
 ---
 
-[← Step 3 — make it a class](step_03_class.md) · [Workshop index](../WORKSHOP.md) · [Step 5 — subclass `Processor` →](step_05_processor_subclass.md)
+[← Step 3 — make it a class](step_03_class.md) · [Workshop index](../README.md) · [Step 5 — subclass `Processor` →](step_05_processor_subclass.md)

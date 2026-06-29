@@ -38,4 +38,4 @@ We pass `greeting_name` in through the env dict here, just like a recipe's
 
 ---
 
-[← Step 7 — `self.output()`](step_07_self_output.md) · [Workshop index](../WORKSHOP.md) · [Step 9 — produce a result →](step_09_outputs.md)
+[← Step 7 — `self.output()`](step_07_self_output.md) · [Workshop index](../README.md) · [Step 9 — produce a result →](step_09_outputs.md)

@@ -15,4 +15,4 @@ runs processors. So let's work to become one.
 
 ---
 
-[Workshop index](../WORKSHOP.md) · [Step 2 — a `main()` function →](step_02_function.md)
+[Workshop index](../README.md) · [Step 2 — a `main()` function →](step_02_function.md)

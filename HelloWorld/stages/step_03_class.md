@@ -42,4 +42,4 @@ the same reason a real processor's file is named after its class, like
 
 ---
 
-[← Step 2 — a `main()` function](step_02_function.md) · [Workshop index](../WORKSHOP.md) · [Step 4 — the `__main__` guard →](step_04_main_guard.md)
+[← Step 2 — a `main()` function](step_02_function.md) · [Workshop index](../README.md) · [Step 4 — the `__main__` guard →](step_04_main_guard.md)

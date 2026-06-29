@@ -102,8 +102,8 @@ It prints `HelloWorld: Hello MacAdmins!` and dumps the resulting environment
 (including `greeting_result`) back out as a plist — exactly what it would hand to
 the next processor.
 
-That's the whole workshop. Head back to the [recap](../WORKSHOP.md#recap) on the index.
+That's the whole workshop. Head back to the [recap](../README.md#recap) on the index.
 
 ---
 
-[← Step 9 — produce a result](step_09_outputs.md) · [Workshop index](../WORKSHOP.md)
+[← Step 9 — produce a result](step_09_outputs.md) · [Workshop index](../README.md)

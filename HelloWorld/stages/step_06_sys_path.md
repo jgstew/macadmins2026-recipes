@@ -53,4 +53,4 @@ remaining step is now just `/usr/local/autopkg/python stages/step_…`.
 
 ---
 
-[← Step 5 — subclass `Processor`](step_05_processor_subclass.md) · [Workshop index](../WORKSHOP.md) · [Step 7 — `self.output()` →](step_07_self_output.md)
+[← Step 5 — subclass `Processor`](step_05_processor_subclass.md) · [Workshop index](../README.md) · [Step 7 — `self.output()` →](step_07_self_output.md)
