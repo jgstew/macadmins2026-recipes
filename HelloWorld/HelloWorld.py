@@ -1,6 +1,5 @@
 #!/usr/local/autopkg/python
-#
-# Your Name Here - 2026
+# Created 2026 by YourNameHere
 #
 # Step 10 — the finished processor.
 #
