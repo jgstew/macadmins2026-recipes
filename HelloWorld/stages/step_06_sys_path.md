@@ -37,7 +37,8 @@ We can add that folder from inside the script instead:
 
 ```python
 import sys
-sys.path.insert(0, "/Library/AutoPkg")   # look here first when importing
+
+sys.path.insert(0, "/Library/AutoPkg")  # look here first when importing
 ```
 
 With `/Library/AutoPkg` on `sys.path`, `import autopkglib` now succeeds on its
