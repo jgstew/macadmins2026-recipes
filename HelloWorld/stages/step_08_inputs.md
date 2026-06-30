@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
 See this code in the file here: [step_08_inputs.py](step_08_inputs.py)
 
-To run it:
+To run it (from the `HelloWorld/` folder):
 
 ```bash
 /usr/local/autopkg/python stages/step_08_inputs.py
@@ -38,11 +38,16 @@ what a recipe is allowed to pass in — each input's name, whether it's
 `required`, a `default` for when the recipe omits it, and a `description`
 (this is what `autopkg processor-info HelloWorld` prints). The actual value
 arrives in `self.env`, and we read it with `self.env.get("greeting_name",
-"World")`.
+"World (step 8)")`.
 
 We pass `greeting_name` in through the env dict here, just like a recipe's
 `Arguments:` will. Change the value and the output changes — without touching
 `main()`. That parameterization is the entire point of a processor.
+
+**Explore:** Remove `"greeting_name": "MacAdmins (step 8)"` from the call at the
+bottom of `step_08_inputs.py` (leaving `HelloWorld({"verbose": 1}).main()`) and run
+it again. You'll get `Hello World (step 8)!` — with no value supplied,
+`self.env.get()` fell back to the `default`.
 
 ---
 

@@ -13,7 +13,7 @@ HelloWorld().main()
 
 See this code in the file here: [step_03_class.py](step_03_class.py)
 
-To run it:
+To run it (from the `HelloWorld/` folder):
 
 ```bash
 /usr/local/autopkg/python stages/step_03_class.py

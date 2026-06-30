@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
 See this code in the file here: [step_05_processor_subclass.py](step_05_processor_subclass.py)
 
-To run it:
+To run it (from the `HelloWorld/` folder):
 
 ```bash
 PYTHONPATH=/Library/AutoPkg /usr/local/autopkg/python stages/step_05_processor_subclass.py

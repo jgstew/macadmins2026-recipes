@@ -68,13 +68,15 @@ Then work from inside this workshop folder:
 cd HelloWorld
 ```
 
-Almost every command is just `/usr/local/autopkg/python stages/step_0X.py`:
+Almost every command is just `/usr/local/autopkg/python stages/step_0X.py` (where `0X` is the step number):
 
 ```bash
 /usr/local/autopkg/python stages/step_01_hello.py
 ```
 
 The one exception is [**Step 5**](stages/step_05_processor_subclass.md) for reasons that will be explained then.
+
+**Troubleshooting:** if a command fails with `ModuleNotFoundError: No module named 'autopkglib'`, you're either not using `/usr/local/autopkg/python`, or — on Step 5 only — you left off the `PYTHONPATH=/Library/AutoPkg` prefix.
 
 ---
 

@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
 See this code in the file here: [step_06_sys_path.py](step_06_sys_path.py)
 
-To run it:
+To run it (from the `HelloWorld/` folder):
 
 ```bash
 /usr/local/autopkg/python stages/step_06_sys_path.py
@@ -59,6 +59,12 @@ Two things worth noticing:
 
 Python internals aren't the goal here, but this change is worth it: every
 remaining step is now just `/usr/local/autopkg/python stages/step_…`.
+
+**Explore:** Delete the `sys.path.insert(0, "/Library/AutoPkg")` line from
+`step_06_sys_path.py` and run it again. You'll get `ModuleNotFoundError: No module
+named 'autopkglib'` — that line is the only thing telling Python where to find
+AutoPkg. Put it back (or use the `PYTHONPATH=/Library/AutoPkg` prefix from Step 5)
+and it works again.
 
 ---
 

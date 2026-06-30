@@ -3,8 +3,9 @@
 Steps 1–9 are the whole idea. A shipped processor just adds a bit of
 conventional boilerplate around it — and drops the [Step 6](step_06_sys_path.md) `sys.path` line, since
 when AutoPkg runs your recipe it already has `autopkglib` on the path (that's why
-the `autopkg run` below needs neither `PYTHONPATH` nor a `sys.path` tweak). Here
-is the finished [`HelloWorld.py`](../HelloWorld.py) (one level up, in the workshop folder):
+the `autopkg run` below needs neither `PYTHONPATH` nor a `sys.path` tweak). It also drops the per-step `(step N)` marker the stage files
+printed, so the greeting is just `Hello World!` again. Here is the finished
+[`HelloWorld.py`](../HelloWorld.py) (one level up, in the workshop folder):
 
 ```python
 #!/usr/local/autopkg/python
@@ -66,7 +67,7 @@ purpose: that's how AutoPkg locates the processor a recipe asks for.
 ### Run it inside a real recipe
 
 The whole point was to be runnable by AutoPkg. The recipe
-[`HelloWorld.recipe.yaml`](../HelloWorld.recipe.yaml) does exactly that:
+[`HelloWorld.recipe.yaml`](../HelloWorld.recipe.yaml) does exactly that (run from the `HelloWorld/` folder):
 
 ```yaml
 Process:

@@ -12,7 +12,7 @@ main()
 
 See this code in the file here: [step_02_function.py](step_02_function.py)
 
-To run it:
+To run it (from the `HelloWorld/` folder):
 
 ```bash
 /usr/local/autopkg/python stages/step_02_function.py
@@ -29,7 +29,7 @@ still call `main()` ourselves on the last line.
 
 **Explore:** Delete `main()` at the end of the `step_02_function.py` file and run it again.
 You should NOT see any output. This is because `main()` never gets called so running
-the script does nothing in this state. Using `main()` this way is a programming convention.
+the script does nothing in this state. Nothing runs until something *calls* it.
 
 ---
 

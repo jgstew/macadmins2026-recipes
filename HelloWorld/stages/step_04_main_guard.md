@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
 See this code in the file here: [step_04_main_guard.py](step_04_main_guard.py)
 
-To run it:
+To run it (from the `HelloWorld/` folder):
 
 ```bash
 /usr/local/autopkg/python stages/step_04_main_guard.py

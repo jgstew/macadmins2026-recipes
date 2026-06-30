@@ -8,7 +8,7 @@ print("Hello World! (step 1)")
 
 See this code in the file here: [step_01_hello.py](step_01_hello.py)
 
-To run it:
+To run it (from the `HelloWorld/` folder):
 
 ```bash
 /usr/local/autopkg/python stages/step_01_hello.py

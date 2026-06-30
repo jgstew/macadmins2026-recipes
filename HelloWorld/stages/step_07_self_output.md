@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
 See this code in the file here: [step_07_self_output.py](step_07_self_output.py)
 
-To run it:
+To run it (from the `HelloWorld/` folder):
 
 ```bash
 /usr/local/autopkg/python stages/step_07_self_output.py
@@ -31,7 +31,11 @@ The important detail: `self.output()` decides whether to print by checking the
 verbosity level **stored in `self.env`**. So it needs `self.env` to exist —
 which is why we now create the instance with a dictionary: `HelloWorld({"verbose":
 1})`. That dictionary is the environment AutoPkg normally provides; right now
-we're standing in for AutoPkg. Set `verbose` to `0` and the line disappears,
+we're standing in for AutoPkg.
+
+**Explore:** Change `{"verbose": 1}` to `{"verbose": 0}` (or just `{}`) at the
+bottom of `step_07_self_output.py` and run it again. The greeting vanishes —
+`self.output()` checked `self.env` for the verbosity level and stayed quiet,
 exactly like a non-verbose `autopkg run`.
 
 ---

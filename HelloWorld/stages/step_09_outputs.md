@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
 See this code in the file here: [step_09_outputs.py](step_09_outputs.py)
 
-To run it:
+To run it (from the `HelloWorld/` folder):
 
 ```bash
 /usr/local/autopkg/python stages/step_09_outputs.py
