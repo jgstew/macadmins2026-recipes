@@ -26,8 +26,8 @@ __all__ = ["HelloWorld"]
 class HelloWorld(Processor):
     """Greets a named recipient and stores the greeting as an output variable."""
 
-    # AutoPkg shows `description` in `autopkg processor-info`. This idiom reuses
-    # the class docstring as the description, then restores __doc__ afterwards.
+    # AutoPkg shows `description` in `autopkg processor-info`.
+    # This idiom reuses the class docstring as the description.
     description = __doc__
     input_variables = {
         "greeting_name": {
@@ -41,7 +41,6 @@ class HelloWorld(Processor):
             "description": "The greeting that was produced.",
         },
     }
-    __doc__ = description
 
     def main(self):
         """Execution starts here. AutoPkg calls this once per recipe step."""
