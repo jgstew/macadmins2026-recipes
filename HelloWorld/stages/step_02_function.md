@@ -27,6 +27,10 @@ anything at the top level runs during that import, before AutoPkg is ready.) We
 name it `main()` because that is the exact method AutoPkg will call. For now we
 still call `main()` ourselves on the last line.
 
+**Explore:** Delete `main()` at the end of the `step_02_function.py` file and run it again.
+You should NOT see any output. This is because `main()` never gets called so running
+the script does nothing in this state. Using `main()` this way is a programming convention.
+
 ---
 
 [← Step 1 — a plain script](step_01_hello.md) · [Workshop index](../README.md) · [Step 3 — make it a class →](step_03_class.md)

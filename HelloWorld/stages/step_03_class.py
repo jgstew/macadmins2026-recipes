@@ -14,6 +14,7 @@
 # The last line creates an instance and calls main() — which is precisely what
 # AutoPkg will do for us once this is a real processor.
 
+
 class HelloWorld:
     def main(self):
         print("Hello World! (step 3)")

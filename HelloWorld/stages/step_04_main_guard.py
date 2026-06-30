@@ -18,6 +18,7 @@
 # guarded code is skipped. Result: run directly -> main() runs; imported by
 # AutoPkg -> it does not. AutoPkg will call main() itself when it's ready.
 
+
 class HelloWorld:
     def main(self):
         print("Hello World! (step 4)")
