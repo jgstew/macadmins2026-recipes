@@ -143,6 +143,8 @@ Run it from this folder:
 autopkg run -v FileHasher.recipe.yaml --search-dir .
 ```
 
+Or run it for you: `bash FileHasher.sh`
+
 `--search-dir .` tells AutoPkg to look in this folder for `FileHasher.py` (AutoPkg
 finds a processor by matching the recipe's `Processor:` name to a same-named `.py`
 file). You should see it download the file and print:
