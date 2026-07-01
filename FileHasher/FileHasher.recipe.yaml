@@ -1,0 +1,21 @@
+---
+# Downloads a file, then computes its MD5 — a two-processor recipe.
+#
+# Run it (from this FileHasher/ folder) with:
+#   autopkg run -v FileHasher.recipe.yaml --search-dir .
+#
+# URLDownloaderPython (built into AutoPkg, and cross-platform) downloads the file
+# and sets `pathname`. FileHasher reads `pathname` and hashes it — no arguments
+# needed. That hand-off between steps is the whole point of a recipe.
+Description: Download a file and compute its MD5.
+Identifier: com.github.jgstew.macadmins2026.FileHasher
+Input:
+  NAME: FileHasherDemo
+  url: "https://raw.githubusercontent.com/autopkg/autopkg/v2.9.0/LICENSE.txt"
+MinimumVersion: "2.3"
+Process:
+  - Processor: URLDownloaderPython
+    Arguments:
+      url: "%url%"
+
+  - Processor: FileHasher
