@@ -9,6 +9,13 @@
         "runOn": "folderOpen"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "assert-yaml-recipe",
+      "type": "shell",
+      "command": "case \"${fileExtname}\" in .yaml|.yml|.recipe|.plist) exit 0 ;; *) echo 'Active file is not a YAML recipe (.yaml/.yml)'; exit 1 ;; esac",
+      "presentation": { "reveal": "silent" },
+      "problemMatcher": []
     }
   ]
 }
