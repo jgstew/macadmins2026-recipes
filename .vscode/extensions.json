@@ -1,5 +1,5 @@
 {
   "recommendations": [
-    "EditorConfig.EditorConfig"
+    "ms-python.python", "EditorConfig.EditorConfig", "redhat.vscode-yaml"
   ]
 }

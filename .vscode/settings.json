@@ -1,7 +1,20 @@
 {
   "editor.formatOnSave": true,
   "git.autofetch": true,
+  "python.analysis.completeFunctionParens": true,
+  "python.autoComplete.addBrackets": true,
   "workbench.editorAssociations": {
     "*.md": "vscode.markdown.preview.editor"
-  }
+  },
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingImports": "information"
+  },
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/autopkg/jgstew-recipes/refs/heads/main/.AutoPkgRecipeOpinionated.schema.json": [
+      "**.recipe.yaml",
+      "**.recipe.yml"
+    ]
+  },
+  "python-envs.defaultEnvManager": "ms-python.python:system",
+  "python.defaultInterpreterPath": "/usr/local/autopkg/python"
 }
