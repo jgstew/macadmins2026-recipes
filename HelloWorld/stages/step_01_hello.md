@@ -1,0 +1,26 @@
+# Step 1 — a plain script
+
+We start with the most basic "Hello World!" python script and we will build up from here.
+
+```python
+print("Hello World! (step 1)")
+```
+
+See this code in the file here: [step_01_hello.py](step_01_hello.py)
+
+To run it (from the `HelloWorld/` folder):
+
+```bash
+/usr/local/autopkg/python stages/step_01_hello.py
+#  Hello World! (step 1)
+```
+
+Or run it for you: `bash stages/step_01_hello.sh`
+
+It runs. But it is **not** an AutoPkg processor — AutoPkg can't hand it any
+values and can't get anything back out of it. AutoPkg doesn't run scripts; it
+runs processors. So let's work to become one.
+
+---
+
+[Workshop index](../README.md) · [Step 2 — a `main()` function →](step_02_function.md)
