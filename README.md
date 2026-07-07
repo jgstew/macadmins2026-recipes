@@ -4,6 +4,9 @@ Workshops / presentation about AutoPkg for **PSU MacAdmins 2026**.
 
 Each workshop is a self-contained folder you can work through on its own.
 
+Presentation Slides:
+- https://docs.google.com/presentation/d/1nsxv0a7rz_D0ICINo67U9NcoivHov9yRbKLVAWkX6Hc/edit?usp=sharing
+
 ## Workshops
 
 - **[HelloWorld/](HelloWorld/README.md)** — _From `print("Hello World!")` to an
